@@ -87,21 +87,21 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\TransactionModel.Designer.cs">
+    <Compile Include="Models\UserModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>TransactionModel.edmx</DependentUpon>
+      <DependentUpon>UserModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <EntityDeploy Include="Models\TransactionModel.edmx">
+    <EntityDeploy Include="Models\UserModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>TransactionModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>UserModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\TransactionModel.edmx.diagram">
-      <DependentUpon>TransactionModel.edmx</DependentUpon>
+    <Content Include="Models\UserModel.edmx.diagram">
+      <DependentUpon>UserModel.edmx</DependentUpon>
     </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
