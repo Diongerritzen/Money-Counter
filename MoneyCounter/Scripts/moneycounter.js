@@ -9,8 +9,13 @@ app.controller('TransactionsController', function ($scope, $http) {
         $http.get(url)
         .success(function (data, status, header, config) {
             $scope.transactionList = data;
+
             angular.forEach($scope.transactionList, function (transaction, index) {
-                $scope.transactionList[index].Amount = '€' + transaction.Amount.toFixed(2);
+                $scope.transactionList[index].Amount = transaction.Amount.toFixed(2);
+
+                //angular.forEach(transaction.Categories, function (category, catIndex) {
+                //    $scope.transactionList[index].Categories[catIndex] = resolve($scope.transactionList, category.$ref)
+                //});
             });
         })
         .error(function () {

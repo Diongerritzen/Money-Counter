@@ -1,13 +1,28 @@
 ﻿body {
 }
 
+.mclist-container {
+    width:800px;
+    margin-top:15px;
+    padding-top:15px;
+    background-color:#990000;
+}
+
+.mclist-table {
+    background-color:white;
+}
+
 .Expense {
     color: red;
 }
 .Expense:before {
-    content: '-'
+    content: '€-';
 }
 
 .Income {
     color: green;
+}
+
+.Income:before {
+    content: '€';
 }

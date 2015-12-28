@@ -86,7 +86,7 @@
     </Content>
     <Content Include="Global.asax" />
     <Content Include="index.html" />
-    <Content Include="MoneyCounter.css" />
+    <Content Include="moneycounter.css" />
     <Content Include="Scripts\angular-mocks.js" />
     <None Include="Scripts\angular.intellisense.js" />
     <Content Include="Scripts\angular.js" />
@@ -153,7 +153,6 @@
       <LastGenOutput>UserModel.cs</LastGenOutput>
       <DependentUpon>UserModel.edmx</DependentUpon>
     </Content>
-    <Content Include="ClassDiagram1.cd" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

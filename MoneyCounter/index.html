@@ -3,7 +3,7 @@
 <head>
     <title>Money Counter</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link rel="stylesheet" href="MoneyCounter.css" type="text/css" />
+    <link rel="stylesheet" href="moneycounter.css" type="text/css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
     <script src="Scripts/moneycounter.js"></script>
@@ -13,17 +13,19 @@
 </head>
 <body>
 
-    <div class="container" ng-controller="TransactionsController" style="width:800px; margin-top:15px; padding-top:15px; background-color:#990000">
+    <div class="container mclist-container" ng-controller="TransactionsController">
 
         <!-- transaction list -->
-        <table class="table table-bordered" style="background-color:white">
+        <table class="table table-bordered mclist-table">
             <tr>
                 <td>Date</td>
+                <td>Category</td>
                 <td>Description</td>
                 <td>Amount</td>
             </tr>
             <tr ng-repeat="t in transactionList">
                 <td>{{t.Date}}</td>
+                <td><span ng-repeat="c in t.Categories">{{c.Name}} </span></td>
                 <td>{{t.Description}}</td>
                 <td class="{{t.Type}}">{{t.Amount}}</td>
             </tr>
