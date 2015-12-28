@@ -11,29 +11,29 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="TransactionModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
-        <EntityContainer Name="TransactionModelContainer" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Transactions" EntityType="TransactionModel.Transaction" />
-          <EntitySet Name="Categories" EntityType="TransactionModel.Category" />
-          <AssociationSet Name="CategoryTransaction" Association="TransactionModel.CategoryTransaction">
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="UserModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="UserModelContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Transactions" EntityType="UserModel.Transaction" />
+          <EntitySet Name="Categories" EntityType="UserModel.Category" />
+          <AssociationSet Name="CategoryTransaction" Association="UserModel.CategoryTransaction">
             <End Role="Category" EntitySet="Categories" />
             <End Role="Transaction" EntitySet="Transactions" />
           </AssociationSet>
-          <EntitySet Name="Users" EntityType="TransactionModel.User" />
-          <AssociationSet Name="UserTransaction" Association="TransactionModel.UserTransaction">
+          <EntitySet Name="Users" EntityType="UserModel.User" />
+          <AssociationSet Name="UserTransaction" Association="UserModel.UserTransaction">
             <End Role="User" EntitySet="Users" />
             <End Role="Transaction" EntitySet="Transactions" />
           </AssociationSet>
-          <EntitySet Name="Recurrences" EntityType="TransactionModel.Recurrence" />
-          <AssociationSet Name="CategoryRecurrence" Association="TransactionModel.CategoryRecurrence">
+          <EntitySet Name="Recurrences" EntityType="UserModel.Recurrence" />
+          <AssociationSet Name="CategoryRecurrence" Association="UserModel.CategoryRecurrence">
             <End Role="Category" EntitySet="Categories" />
             <End Role="Recurrence" EntitySet="Recurrences" />
           </AssociationSet>
-          <AssociationSet Name="UserRecurrence" Association="TransactionModel.UserRecurrence">
+          <AssociationSet Name="UserRecurrence" Association="UserModel.UserRecurrence">
             <End Role="User" EntitySet="Users" />
             <End Role="Recurrence" EntitySet="Recurrences" />
           </AssociationSet>
-          <AssociationSet Name="UserCategory" Association="TransactionModel.UserCategory">
+          <AssociationSet Name="UserCategory" Association="UserModel.UserCategory">
             <End Role="User" EntitySet="Users" />
             <End Role="Category" EntitySet="Categories" />
           </AssociationSet>
@@ -47,8 +47,8 @@
           <Property Name="Amount" Type="Decimal" Nullable="false" />
           <Property Name="Type" Type="String" Nullable="false" />
           <Property Name="Description" Type="String" Nullable="true" />
-          <NavigationProperty Name="Category" Relationship="TransactionModel.CategoryTransaction" FromRole="Transaction" ToRole="Category" />
-          <NavigationProperty Name="User" Relationship="TransactionModel.UserTransaction" FromRole="Transaction" ToRole="User" />
+          <NavigationProperty Name="Category" Relationship="UserModel.CategoryTransaction" FromRole="Transaction" ToRole="Category" />
+          <NavigationProperty Name="User" Relationship="UserModel.UserTransaction" FromRole="Transaction" ToRole="User" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -57,13 +57,13 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="true" />
           <Property Name="TransactionType" Type="String" Nullable="false" />
-          <NavigationProperty Name="Transaction" Relationship="TransactionModel.CategoryTransaction" FromRole="Category" ToRole="Transaction" />
-          <NavigationProperty Name="Recurrence" Relationship="TransactionModel.CategoryRecurrence" FromRole="Category" ToRole="Recurrence" />
-          <NavigationProperty Name="User" Relationship="TransactionModel.UserCategory" FromRole="Category" ToRole="User" />
+          <NavigationProperty Name="Transaction" Relationship="UserModel.CategoryTransaction" FromRole="Category" ToRole="Transaction" />
+          <NavigationProperty Name="Recurrence" Relationship="UserModel.CategoryRecurrence" FromRole="Category" ToRole="Recurrence" />
+          <NavigationProperty Name="User" Relationship="UserModel.UserCategory" FromRole="Category" ToRole="User" />
         </EntityType>
         <Association Name="CategoryTransaction">
-          <End Type="TransactionModel.Category" Role="Category" Multiplicity="*" />
-          <End Type="TransactionModel.Transaction" Role="Transaction" Multiplicity="*" />
+          <End Type="UserModel.Category" Role="Category" Multiplicity="*" />
+          <End Type="UserModel.Transaction" Role="Transaction" Multiplicity="*" />
         </Association>
         <EntityType Name="User">
           <Key>
@@ -72,16 +72,16 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Email" Type="String" Nullable="false" />
           <Property Name="Password" Type="String" Nullable="false" />
-          <NavigationProperty Name="Transaction" Relationship="TransactionModel.UserTransaction" FromRole="User" ToRole="Transaction" />
+          <NavigationProperty Name="Transaction" Relationship="UserModel.UserTransaction" FromRole="User" ToRole="Transaction" />
           <Property Name="FirstName" Type="String" Nullable="true" />
           <Property Name="LastName" Type="String" Nullable="true" />
           <Property Name="UserType" Type="String" Nullable="false" cg:SetterAccess="Private" />
-          <NavigationProperty Name="Recurrence" Relationship="TransactionModel.UserRecurrence" FromRole="User" ToRole="Recurrence" />
-          <NavigationProperty Name="Category" Relationship="TransactionModel.UserCategory" FromRole="User" ToRole="Category" />
+          <NavigationProperty Name="Recurrence" Relationship="UserModel.UserRecurrence" FromRole="User" ToRole="Recurrence" />
+          <NavigationProperty Name="Category" Relationship="UserModel.UserCategory" FromRole="User" ToRole="Category" />
         </EntityType>
         <Association Name="UserTransaction">
-          <End Type="TransactionModel.User" Role="User" Multiplicity="1" />
-          <End Type="TransactionModel.Transaction" Role="Transaction" Multiplicity="*" />
+          <End Type="UserModel.User" Role="User" Multiplicity="1" />
+          <End Type="UserModel.Transaction" Role="Transaction" Multiplicity="*" />
         </Association>
         <EntityType Name="Recurrence">
           <Key>
@@ -92,20 +92,20 @@
           <Property Name="Description" Type="String" Nullable="true" />
           <Property Name="TimeInterval" Type="Int16" Nullable="false" />
           <Property Name="TransactionType" Type="String" Nullable="false" />
-          <NavigationProperty Name="Category" Relationship="TransactionModel.CategoryRecurrence" FromRole="Recurrence" ToRole="Category" />
-          <NavigationProperty Name="User" Relationship="TransactionModel.UserRecurrence" FromRole="Recurrence" ToRole="User" />
+          <NavigationProperty Name="Category" Relationship="UserModel.CategoryRecurrence" FromRole="Recurrence" ToRole="Category" />
+          <NavigationProperty Name="User" Relationship="UserModel.UserRecurrence" FromRole="Recurrence" ToRole="User" />
         </EntityType>
         <Association Name="CategoryRecurrence">
-          <End Type="TransactionModel.Category" Role="Category" Multiplicity="*" />
-          <End Type="TransactionModel.Recurrence" Role="Recurrence" Multiplicity="*" />
+          <End Type="UserModel.Category" Role="Category" Multiplicity="*" />
+          <End Type="UserModel.Recurrence" Role="Recurrence" Multiplicity="*" />
         </Association>
         <Association Name="UserRecurrence">
-          <End Type="TransactionModel.User" Role="User" Multiplicity="1" />
-          <End Type="TransactionModel.Recurrence" Role="Recurrence" Multiplicity="*" />
+          <End Type="UserModel.User" Role="User" Multiplicity="1" />
+          <End Type="UserModel.Recurrence" Role="Recurrence" Multiplicity="*" />
         </Association>
         <Association Name="UserCategory">
-          <End Type="TransactionModel.User" Role="User" Multiplicity="1" />
-          <End Type="TransactionModel.Category" Role="Category" Multiplicity="*" />
+          <End Type="UserModel.User" Role="User" Multiplicity="1" />
+          <End Type="UserModel.Category" Role="Category" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -114,7 +114,7 @@
       <Mapping xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs" Space="C-S">
         <Alias Key="Model" Value="TransactionModel" />
         <Alias Key="Target" Value="TransactionModel.Store" />
-        <EntityContainerMapping CdmEntityContainer="TransactionModelContainer" StorageEntityContainer="TransactionModelTargetContainer">
+        <EntityContainerMapping CdmEntityContainer="UserModelContainer" StorageEntityContainer="TransactionModelTargetContainer">
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
