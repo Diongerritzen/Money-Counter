@@ -1,0 +1,13 @@
+﻿body {
+}
+
+.Expense {
+    color: red;
+}
+.Expense:before {
+    content: '-'
+}
+
+.Income {
+    color: green;
+}

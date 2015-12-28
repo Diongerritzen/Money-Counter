@@ -1,12 +1,35 @@
 ﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" ng-app="MoneyCounterApp">
 <head>
     <title>Money Counter</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="MoneyCounter.css" type="text/css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="Scripts/moneycounter.js"></script>
+    <style>
+        
+    </style>
 </head>
 <body>
+
+    <div class="container" ng-controller="TransactionsController" style="width:800px; margin-top:15px; padding-top:15px; background-color:#990000">
+
+        <!-- transaction list -->
+        <table class="table table-bordered" style="background-color:white">
+            <tr>
+                <td>Date</td>
+                <td>Description</td>
+                <td>Amount</td>
+            </tr>
+            <tr ng-repeat="t in transactionList">
+                <td>{{t.Date}}</td>
+                <td>{{t.Description}}</td>
+                <td class="{{t.Type}}">{{t.Amount}}</td>
+            </tr>
+        </table>
+
+    </div>
 
 </body>
 </html>

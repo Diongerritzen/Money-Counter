@@ -5,7 +5,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="cb9718affdcd4e3a932c9f6d30f09e4d" Name="Diagram1" >
-        <EntityTypeShape EntityType="UserModel.Transaction" Width="1.5" PointX="3.625" PointY="3.5" />
+        <EntityTypeShape EntityType="UserModel.Transaction" Width="1.5" PointX="3.625" PointY="3.625" />
         <EntityTypeShape EntityType="UserModel.Category" Width="1.5" PointX="8.875" PointY="2.25" IsExpanded="true" />
         <AssociationConnector Association="UserModel.CategoryTransaction" />
         <EntityTypeShape EntityType="UserModel.User" Width="1.5" PointX="6.25" PointY="2" />
