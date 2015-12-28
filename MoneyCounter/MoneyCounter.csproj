@@ -74,6 +74,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\MoneyCounterDB.mdf" />
+    <Content Include="App_Data\MoneyCounterDB_log.ldf">
+      <DependentUpon>MoneyCounterDB.mdf</DependentUpon>
+    </Content>
     <Content Include="Global.asax" />
     <Content Include="index.html" />
     <Content Include="Web.config" />
@@ -107,7 +111,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Controllers\" />
   </ItemGroup>
   <PropertyGroup>

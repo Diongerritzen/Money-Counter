@@ -5,10 +5,15 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="cb9718affdcd4e3a932c9f6d30f09e4d" Name="Diagram1" >
-        <EntityTypeShape EntityType="TransactionModel.Transaction" Width="1.5" PointX="6.5" PointY="1.875" />
-        <EntityTypeShape EntityType="TransactionModel.Category" Width="1.5" PointX="8.875" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TransactionModel.Transaction" Width="1.5" PointX="3.625" PointY="3.5" />
+        <EntityTypeShape EntityType="TransactionModel.Category" Width="1.5" PointX="9.25" PointY="2.25" IsExpanded="true" />
         <AssociationConnector Association="TransactionModel.CategoryTransaction" />
-        <EntityTypeShape EntityType="TransactionModel.User" Width="1.5" PointX="3.25" PointY="2.625" />
+        <EntityTypeShape EntityType="TransactionModel.User" Width="1.5" PointX="6.25" PointY="2" />
+        <AssociationConnector Association="TransactionModel.UserTransaction" />
+        <EntityTypeShape EntityType="TransactionModel.Recurrence" Width="1.5" PointX="3.625" PointY="0.75" />
+        <AssociationConnector Association="TransactionModel.CategoryRecurrence" />
+        <AssociationConnector Association="TransactionModel.UserRecurrence" />
+        <AssociationConnector Association="TransactionModel.UserCategory" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
