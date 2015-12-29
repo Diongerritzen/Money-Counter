@@ -101,10 +101,20 @@ namespace MoneyCounter.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.Transactions.Add(transaction);
+            Transaction newTransaction = new Transaction()
+                { Amount = transaction.Amount, Date = transaction.Date, Description = transaction.Description, Type = transaction.Type };
+            //newTransaction.Type = transaction.Amount < 0 ? "Expense" : "Income";
+            newTransaction.User = db.Users.Where(u => u.Id == transaction.User.Id).ToList()[0];
+
+            foreach (var category in transaction.Categories)
+            {
+                newTransaction.Categories.Add(db.Categories.Where(c => c.Id == category.Id).ToList()[0]);
+            }
+
+            db.Transactions.Add(newTransaction);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = transaction.Id }, transaction);
+            return CreatedAtRoute("DefaultApi", new { id = newTransaction.Id }, newTransaction);
         }
 
         // DELETE: api/Transactions/5

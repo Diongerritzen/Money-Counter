@@ -1,17 +1,25 @@
 ﻿var app = angular.module('MoneyCounterApp', []);
-app.controller('TransactionsController', function ($scope, $http, jsonPointerParseService) {
+app.controller('TransactionsController',
+ function ($scope, $http, jsonPointerParseService, TransactionsService, CategoriesService) {
     var url = 'http://localhost:52709/api/Transactions';
+    
+    $scope.transactionList = {};
+    $scope.categoryList = {};
 
     getTransactionList();
+    getCategoryList();
+
+    $scope.newTransactionCategory = '1';
 
     $scope.addTransaction = function () {
         var newTransaction = {
             Date: $scope.newTransactionDate,
-            Category: $scope.newTransactionCategory,
+            Categories: [{ Id: $scope.newTransactionCategory }],
             Description: $scope.newTransactionDescription,
             Amount: $scope.newTransactionAmount,
-            User: 1
-        }
+            Type: $scope.newTransactionType,
+            User: { Id: 1 }
+        };
         $http.post(url, newTransaction)
             .success(function () {
                 getTransactionList();
@@ -20,36 +28,44 @@ app.controller('TransactionsController', function ($scope, $http, jsonPointerPar
                 alert("failure in addTransaction");
             });
 
-        $scope.newTransactionDate = Date();
+        $scope.newTransactionDate = Date.now();
         $scope.newTransactionCategory = '';
         $scope.newTransactionDescription = '';
-        $scope.newTransactionAmount = '0.00';
+        $scope.newTransactionAmount = 0.00;
     }
 
-    function getTransactionList()
-    {
-        $http.get(url)
-        .success(function (data, status, header, config) {
+    function getTransactionList() {
+        TransactionsService.getList()
+            .success(function (data) {
+                $scope.transactionList = jsonPointerParseService.pointerParse(data, 5);
+                //var ids = collectIds(data);
+                //$scope.transactionList = data;
 
-            $scope.transactionList = jsonPointerParseService.pointerParse(data, 5);
-            //var ids = collectIds(data);
-            //$scope.transactionList = data;
-            
-            angular.forEach($scope.transactionList, function (transaction, index) {
-                $scope.transactionList[index].Amount = transaction.Amount.toFixed(2);
-            //    var ids = findReferenceIds(transaction);
-            //    angular.forEach(transaction.Categories, function (category, catIndex) {
-            //        if ('$ref' in category)
-            //        {
-            //            category = ids[category.$ref];
-            //        }
-            //        $scope.transactionList[index].Categories[catIndex] = category;
-            //    });
+                angular.forEach($scope.transactionList, function (transaction, index) {
+                    $scope.transactionList[index].Amount = transaction.Amount.toFixed(2);
+                    //    var ids = findReferenceIds(transaction);
+                    //    angular.forEach(transaction.Categories, function (category, catIndex) {
+                    //        if ('$ref' in category)
+                    //        {
+                    //            category = ids[category.$ref];
+                    //        }
+                    //        $scope.transactionList[index].Categories[catIndex] = category;
+                    //    });
+                });
+            })
+            .error(function () {
+                alert('error from init');
             });
-        })
-        .error(function () {
-            alert('error from init');
-        });
+    }
+
+    function getCategoryList() {
+        CategoriesService.getList()
+            .success(function (data) {
+                $scope.categoryList = jsonPointerParseService.pointerParse(data, 5);
+            })
+            .error(function (data) {
+                console.log(data);
+            });
     }
 });
 
@@ -65,6 +81,29 @@ app.controller('CategoriesController', function ($scope, $http) {
 
 });
 
+app.factory('TransactionsService', function ($http) {
+    var url = 'http://localhost:52709/api/Transactions';
+    var service = {
+        getList: function () {
+            return $http.get(url);
+        }
+    };
+
+    return service;
+});
+
+app.factory('CategoriesService', function ($http, jsonPointerParseService) {
+    var url = 'http://localhost:52709/api/Categories';
+    var service = {
+        getList: function () {
+            return $http.get(url);
+        }
+    };
+    
+    return service;
+});
+
+// http://programmers.stackexchange.com/questions/254481/how-do-i-resolve-ref-in-a-json-object
 app.factory('jsonPointerParseService', function () {
     var hashOfObjects = {};
 

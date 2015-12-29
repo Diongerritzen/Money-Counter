@@ -37,9 +37,19 @@
             <table class="table table-bordered mclist-table">
                 <tr>
                     <td><input class="form-control" type="date" ng-model="newTransactionDate" /></td>
-                    <td><input class="form-control" type="text" ng-model="newTransactionCategory" /></td>
+                    <td>
+                        <select class="form-control" ng-model="newTransactionCategory">
+                            <option value="{{o.Id}}" ng-repeat="o in categoryList">{{o.Name}}</option>
+                        </select>
+                    </td>
                     <td><input class="form-control" type="text" ng-model="newTransactionDescription" /></td>
-                    <td><input class="form-control" type="number" step="0.01" ng-model="newTransactionAmount" /></td>
+                    <td><input class="form-control" type="number" step="0.01" min="0.00" placeholder="0.00" ng-model="newTransactionAmount" /></td>
+                    <td>
+                        <select class="form-control" ng-model="newTransactionType">
+                            <option value="Expense">Expense</option>
+                            <option value="Income">Income</option>
+                        </select>
+                    </td>
                     <td>
                         <span class="input-group-btn">
                             <input class="btn btn-default" type="submit" value="Add">
