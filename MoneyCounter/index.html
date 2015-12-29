@@ -22,14 +22,32 @@
                 <td>Category</td>
                 <td>Description</td>
                 <td>Amount</td>
+                <td></td>
             </tr>
             <tr ng-repeat="t in transactionList">
                 <td>{{t.Date}}</td>
-                <td><span ng-repeat="c in t.Categories">{{c.Name}} </span></td>
+                <td><span class="mclastitem-{{$last}}" ng-repeat="c in t.Categories">{{c.Name}}</span></td>
                 <td>{{t.Description}}</td>
                 <td class="{{t.Type}}">{{t.Amount}}</td>
+                <td><input class="btn btn-default" type="button" value="X"/></td>
             </tr>
         </table>
+
+        <form class="input-group" ng-submit="addTransaction()">
+            <table class="table table-bordered mclist-table">
+                <tr>
+                    <td><input class="form-control" type="date" ng-model="newTransactionDate" /></td>
+                    <td><input class="form-control" type="text" ng-model="newTransactionCategory" /></td>
+                    <td><input class="form-control" type="text" ng-model="newTransactionDescription" /></td>
+                    <td><input class="form-control" type="number" step="0.01" ng-model="newTransactionAmount" /></td>
+                    <td>
+                        <span class="input-group-btn">
+                            <input class="btn btn-default" type="submit" value="Add">
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </form>
 
     </div>
 
