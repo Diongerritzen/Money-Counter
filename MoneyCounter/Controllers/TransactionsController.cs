@@ -9,7 +9,6 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using MoneyCounter.Models;
-using System.Data.Entity.Core.Objects;
 
 namespace MoneyCounter.Controllers
 {
@@ -21,27 +20,6 @@ namespace MoneyCounter.Controllers
         public IQueryable<Transaction> GetTransactions()
         {
             return db.Transactions;
-
-            //List<Transaction> transactionList = db.Transactions.ToList();
-            //List<TransactionModel> transactions = new List<TransactionModel>();
-            //
-            //foreach (var transaction in transactionList)
-            //{
-            //    TransactionModel model = new TransactionModel();
-            //    model.Amount = transaction.Amount;
-            //    model.Date = transaction.Date;
-            //    model.Description = transaction.Description;
-            //    model.Type = transaction.Type;
-            //    foreach (var category in transaction.Categories)
-            //    {
-            //
-            //    }
-            //    model.Categories = transaction.Categories.ToList();
-            //    
-            //    transactions.Add(model);
-            //}
-            //
-            //return transactions.AsQueryable();
         }
 
         // GET: api/Transactions/5
@@ -146,19 +124,5 @@ namespace MoneyCounter.Controllers
         {
             return db.Transactions.Count(e => e.Id == id) > 0;
         }
-    }
-
-    public class TransactionModel
-    {
-        public TransactionModel()
-        {
-            Categories = new List<Category>();
-        }
-
-        public System.DateTime Date { get; set; }
-        public decimal Amount { get; set; }
-        public string Type { get; set; }
-        public string Description { get; set; }
-        public List<Category> Categories { get; set; }
     }
 }
