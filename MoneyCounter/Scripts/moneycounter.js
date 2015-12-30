@@ -1,73 +1,69 @@
 ﻿var app = angular.module('MoneyCounterApp', []);
 app.controller('TransactionsController',
  function ($scope, $http, jsonPointerParseService, TransactionsService, CategoriesService) {
-    var url = 'http://localhost:52709/api/Transactions';
-    
-    $scope.transactionList = {};
-    $scope.categoryList = {};
+     var url = 'http://localhost:52709/api/Transactions';
 
-    getTransactionList();
-    getCategoryList();
+     $scope.transactionList = {};
+     $scope.categoryList = {};
 
-    $scope.newTransactionCategory = '1';
+     getTransactionList();
+     getCategoryList();
 
-    $scope.addTransaction = function () {
-        var newTransaction = {
-            Date: $scope.newTransactionDate,
-            Categories: [{ Id: $scope.newTransactionCategory }],
-            Description: $scope.newTransactionDescription,
-            Amount: $scope.newTransactionAmount,
-            Type: $scope.newTransactionType,
-            User: { Id: 1 }
-        };
-        $http.post(url, newTransaction)
-            .success(function () {
-                getTransactionList();
-            })
-            .error(function () {
-                alert("failure in addTransaction");
-            });
+     $scope.newTransactionCategory = '1';
+     $scope.newTransactionType = 'Expense';
 
-        $scope.newTransactionDate = Date.now();
-        $scope.newTransactionCategory = '';
-        $scope.newTransactionDescription = '';
-        $scope.newTransactionAmount = 0.00;
-    }
+     $scope.addTransaction = function () {
+         var date = $scope.newTransactionDate;
+         var utcdate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+         var newTransaction = {
+             Date: utcdate,
+             Categories: [{ Id: $scope.newTransactionCategory }],
+             Description: $scope.newTransactionDescription,
+             Amount: $scope.newTransactionAmount,
+             Type: $scope.newTransactionType,
+             User: { Id: 1 }
+         };
+         $http.post(url, newTransaction)
+             .success(function () {
+                 getTransactionList();
+             })
+             .error(function () {
+                 alert("failure in addTransaction");
+             });
 
-    function getTransactionList() {
-        TransactionsService.getList()
-            .success(function (data) {
-                $scope.transactionList = jsonPointerParseService.pointerParse(data, 5);
-                //var ids = collectIds(data);
-                //$scope.transactionList = data;
+         alert("date: " + utcdate);
 
-                angular.forEach($scope.transactionList, function (transaction, index) {
-                    $scope.transactionList[index].Amount = transaction.Amount.toFixed(2);
-                    //    var ids = findReferenceIds(transaction);
-                    //    angular.forEach(transaction.Categories, function (category, catIndex) {
-                    //        if ('$ref' in category)
-                    //        {
-                    //            category = ids[category.$ref];
-                    //        }
-                    //        $scope.transactionList[index].Categories[catIndex] = category;
-                    //    });
-                });
-            })
-            .error(function () {
-                alert('error from init');
-            });
-    }
+         $scope.newTransactionDate = Date.now();
+         $scope.newTransactionCategory = '';
+         $scope.newTransactionDescription = '';
+         $scope.newTransactionAmount = 0.00;
+     }
 
-    function getCategoryList() {
-        CategoriesService.getList()
-            .success(function (data) {
-                $scope.categoryList = jsonPointerParseService.pointerParse(data, 5);
-            })
-            .error(function (data) {
-                console.log(data);
-            });
-    }
-});
+     function getTransactionList() {
+         TransactionsService.getList()
+             .success(function (data) {
+                 $scope.transactionList = jsonPointerParseService.pointerParse(data, 5);
+
+                 angular.forEach($scope.transactionList, function (transaction, index) {
+                     $scope.transactionList[index].Amount = transaction.Amount.toFixed(2);
+                     $scope.transactionList[index].Date = moment(transaction.Date).format('L');
+                 });
+             })
+             .error(function () {
+                 alert('error from init');
+             });
+     }
+
+     function getCategoryList() {
+         CategoriesService.getList()
+             .success(function (data) {
+                 $scope.categoryList = jsonPointerParseService.pointerParse(data, 5);
+             })
+             .error(function (data) {
+                 console.log(data);
+             });
+     }
+ });
 
 app.controller('StatisticsController', function ($scope, $http) {
 
@@ -99,7 +95,7 @@ app.factory('CategoriesService', function ($http, jsonPointerParseService) {
             return $http.get(url);
         }
     };
-    
+
     return service;
 });
 

@@ -1,0 +1,51 @@
+﻿body {
+}
+
+.mclist-container {
+    min-width:800px;
+    width: 50%;
+    margin-top:15px;
+    padding-top:15px;
+    background-color:#990000;
+}
+
+.mclist-table {
+    background-color: white;
+}
+
+.mclist-table-date {
+    width: 1px;
+}
+.mclist-table-category {
+    width: 1px;
+    text-align: right;
+}
+.mclist-table-desc {
+    width: auto;
+}
+.mclist-table-amount {
+    width: 80px;
+    text-align: right;
+}
+.mclist-table-delete {
+    width: 1px;
+}
+
+.mclastitem-false:after {
+    content: ', ';
+}
+
+.Expense {
+    color: red;
+}
+.Expense:before {
+    content: '€-';
+}
+
+.Income {
+    color: green;
+}
+
+.Income:before {
+    content: '€';
+}

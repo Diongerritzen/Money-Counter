@@ -87,14 +87,18 @@
     </Content>
     <Content Include="Global.asax" />
     <Content Include="index.html" />
-    <Content Include="css\moneycounter.css" />
-    <Content Include="js\angular-mocks.js" />
-    <None Include="js\angular.intellisense.js" />
-    <Content Include="js\angular.js" />
-    <Content Include="js\angular.min.js" />
-    <Content Include="js\moneycounter.js" />
-    <Content Include="js\angular.min.js.map" />
-    <None Include="js\_references.js" />
+    <Content Include="moneycounter.css" />
+    <Content Include="Scripts\angular-mocks.js" />
+    <None Include="Scripts\angular.intellisense.js" />
+    <Content Include="Scripts\angular.js" />
+    <Content Include="Scripts\angular.min.js" />
+    <Content Include="Scripts\moneycounter.js" />
+    <Content Include="Scripts\angular.min.js.map" />
+    <None Include="Scripts\_references.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
