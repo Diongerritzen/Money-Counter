@@ -40,53 +40,30 @@
             </tr>
         </table>
 
-        <form class="input-group" ng-submit="addTransaction()" ng-hide="showEditForm">
+        <form class="input-group" ng-submit="showEditForm ? editTransaction() : addTransaction()">
             <table class="table table-bordered mclist-table">
                 <tr>
-                    <td><input class="form-control" type="date" ng-model="newTransactionDate" required /></td>
+                    <td><input class="form-control" type="date" ng-model="transactionDateInput" required /></td>
                     <td>
-                        <select class="form-control" ng-model="newTransactionCategory">
-                            <option value="{{o.Id}}" ng-repeat="o in categoryList">{{o.Name}}</option>
+                        <select class="form-control" ng-model="transactionCategoryInput">
+                            <option value="{{c.Id}}" ng-repeat="c in transactionTypeInput == 'Expense' ? categoryExpenseList : categoryIncomeList" ng-selected="{{$first}}">{{c.Name}}</option>
                         </select>
                     </td>
-                    <td><input class="form-control" type="text" placeholder="Description" ng-model="newTransactionDescription" /></td>
-                    <td><input class="form-control mclist-table-amount" type="number" step="0.01" min="0.00" placeholder="0.00" ng-model="newTransactionAmount" required /></td>
+                    <td><input class="form-control" type="text" placeholder="Description" ng-model="transactionDescriptionInput" /></td>
+                    <td><input class="form-control" type="number" step="0.01" min="0.00" placeholder="0.00" ng-model="transactionAmountInput" required /></td>
                     <td>
-                        <select class="form-control" ng-model="newTransactionType">
+                        <select class="form-control" ng-model="transactionTypeInput">
                             <option value="Expense">Expense</option>
                             <option value="Income">Income</option>
                         </select>
                     </td>
                     <td>
-                        <span class="input-group-btn">
+                        <span class="input-group-btn" ng-hide="showEditForm">
                             <input class="btn btn-default" type="submit" value="Add" />
                         </span>
-                    </td>
-                </tr>
-            </table>
-        </form>
-
-        <form class="input-group" ng-submit="editTransaction()" ng-show="showEditForm">
-            <table class="table table-bordered mclist-table">
-                <tr>
-                    <td><input class="form-control" type="date" ng-model="editTransactionDate" required /></td>
-                    <td>
-                        <select class="form-control" ng-model="editTransactionCategory">
-                            <option value="{{o.Id}}" ng-repeat="o in categoryList">{{o.Name}}</option>
-                        </select>
-                    </td>
-                    <td><input class="form-control" type="text" placeholder="Description" ng-model="editTransactionDescription" /></td>
-                    <td><input class="form-control" type="number" step="0.01" min="0.00" placeholder="0.00" ng-model="editTransactionAmount" required /></td>
-                    <td>
-                        <select class="form-control" ng-model="editTransactionType">
-                            <option value="Expense">Expense</option>
-                            <option value="Income">Income</option>
-                        </select>
-                    </td>
-                    <td>
-                        <span class="input-group-btn">
+                        <span class="input-group-btn" ng-show="showEditForm">
                             <input class="btn btn-default" type="submit" value="Edit" />
-                            <input class="btn btn-default" type="button" value="Cancel" ng-click="cancelEditTransaction()" />
+                            <input class="btn btn-default" type="button" value="Cancel" ng-click="closeEditTransaction()" />
                         </span>
                     </td>
                 </tr>

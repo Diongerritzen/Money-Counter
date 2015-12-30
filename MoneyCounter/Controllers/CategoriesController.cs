@@ -22,6 +22,12 @@ namespace MoneyCounter.Controllers
             return db.Categories;
         }
 
+        // GET: api/Categories
+        public IQueryable<Category> GetCategories(string type)
+        {
+            return db.Categories.Where(c => c.TransactionType == type);
+        }
+
         // GET: api/Categories/5
         [ResponseType(typeof(Category))]
         public IHttpActionResult GetCategory(int id)

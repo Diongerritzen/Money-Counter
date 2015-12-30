@@ -3,27 +3,28 @@ app.controller('TransactionsController', function ($scope, $http, jsonPointerPar
     var url = 'http://localhost:52709/api/Transactions';
     
     $scope.transactionList = {};
-    $scope.categoryList = {};
+    $scope.categoryExpenseList = {};
+    $scope.categoryIncomeList = {};
     
     getTransactionList();
-    getCategoryList();
+    getCategoryLists();
     
-    // default values for add transaction form
-    $scope.newTransactionDate = new Date();
-    $scope.newTransactionCategory = '1';
-    $scope.newTransactionType = 'Expense';
+    // default values for add/edit transaction form
+    $scope.transactionDateInput = new Date();
+    $scope.transactionCategoryInput = '1';
+    $scope.transactionTypeInput = 'Expense';
     $scope.showEditForm = false;
     $scope.editableTransaction = {};
     
     $scope.addTransaction = function () {
-        var date = $scope.newTransactionDate;
+        var date = $scope.transactionDateInput;
         var utcdate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
         var newTransaction = {
             Date: utcdate,
-            Categories: [{ Id: $scope.newTransactionCategory }],
-            Description: $scope.newTransactionDescription,
-            Amount: $scope.newTransactionAmount,
-            Type: $scope.newTransactionType,
+            Categories: [{ Id: $scope.transactionCategoryInput }],
+            Description: $scope.transactionDescriptionInput,
+            Amount: $scope.transactionAmountInput,
+            Type: $scope.transactionTypeInput,
             User: { Id: 1 }
         };
 
@@ -35,40 +36,46 @@ app.controller('TransactionsController', function ($scope, $http, jsonPointerPar
                 alert("failure in addTransaction");
             });
     
-        $scope.newTransactionDate = new Date();
-        $scope.newTransactionCategory = '1';
-        $scope.newTransactionDescription = '';
-        $scope.newTransactionAmount = '';
+        $scope.transactionDateInput = new Date();
+        $scope.transactionCategoryInput = '1';
+        $scope.transactionDescriptionInput = '';
+        $scope.transactionAmountInput = '';
     }
     
     $scope.showEditTransaction = function (transaction)
     {
-        $scope.editTransactionDate = new Date(transaction.Date);
-        $scope.editTransactionCategory = transaction.Categories[0].Id + '';
-        $scope.editTransactionDescription = transaction.Description;
-        $scope.editTransactionAmount = parseFloat(transaction.Amount);
-        $scope.editTransactionType = transaction.Type;
+        $scope.transactionDateInput = new Date(transaction.Date);
+        $scope.transactionCategoryInput = transaction.Categories[0].Id + '';
+        $scope.transactionDescriptionInput = transaction.Description;
+        $scope.transactionAmountInput = parseFloat(transaction.Amount);
+        $scope.transactionTypeInput = transaction.Type;
 
         $scope.editableTransaction = transaction;
         $scope.showEditForm = true;
     }
 
-    $scope.cancelEditTransaction = function ()
+    $scope.closeEditTransaction = function ()
     {
+        $scope.transactionDateInput = new Date();
+        $scope.transactionCategoryInput = '1';
+        $scope.transactionDescriptionInput = '';
+        $scope.transactionAmountInput = '';
+        $scope.transactionTypeInput = 'Expense';
+        
         $scope.editableTransaction = {};
         $scope.showEditForm = false;
     }
 
     $scope.editTransaction = function ()
     {
-        var date = $scope.editTransactionDate;
+        var date = $scope.transactionDateInput;
         var utcdate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
         var editedTransaction = {
             Date: utcdate,
-            Categories: [{ Id: $scope.editTransactionCategory }],
-            Description: $scope.editTransactionDescription,
-            Amount: $scope.editTransactionAmount,
-            Type: $scope.editTransactionType,
+            Categories: [{ Id: $scope.transactionCategoryInput }],
+            Description: $scope.transactionDescriptionInput,
+            Amount: $scope.transactionAmountInput,
+            Type: $scope.transactionTypeInput,
             User: { Id: $scope.editableTransaction.User.Id },
             Id: $scope.editableTransaction.Id
         };
@@ -82,8 +89,7 @@ app.controller('TransactionsController', function ($scope, $http, jsonPointerPar
             });
 
 
-        $scope.editableTransaction = {};
-        $scope.showEditForm = false;
+        $scope.closeEditTransaction();
     }
 
     $scope.deleteTransaction = function (id) {
@@ -111,10 +117,17 @@ app.controller('TransactionsController', function ($scope, $http, jsonPointerPar
             });
     }
     
-    function getCategoryList() {
-        CategoriesService.getList()
+    function getCategoryLists() {
+        CategoriesService.getListByType('Expense')
             .success(function (data) {
-                $scope.categoryList = jsonPointerParseService.pointerParse(data, 5);
+                $scope.categoryExpenseList = jsonPointerParseService.pointerParse(data, 5);
+            })
+            .error(function (data) {
+                console.log(data);
+            });
+        CategoriesService.getListByType('Income')
+            .success(function (data) {
+                $scope.categoryIncomeList = jsonPointerParseService.pointerParse(data, 5);
             })
             .error(function (data) {
                 console.log(data);
@@ -150,6 +163,9 @@ app.factory('CategoriesService', function ($http, jsonPointerParseService) {
     var service = {
         getList: function () {
             return $http.get(url);
+        },
+        getListByType: function (type) {
+            return $http.get(url, { params: { type: type } });
         }
     };
 
