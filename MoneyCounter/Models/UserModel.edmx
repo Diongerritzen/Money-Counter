@@ -237,7 +237,8 @@
           <NavigationProperty Name="User" Relationship="UserModel.UserCategory" FromRole="Category" ToRole="User" />
         </EntityType>
         <Association Name="CategoryTransaction">
-          <End Type="UserModel.Category" Role="Category" Multiplicity="*" />
+          <End Type="UserModel.Category" Role="Category" Multiplicity="*" >
+          </End>
           <End Type="UserModel.Transaction" Role="Transaction" Multiplicity="*" />
         </Association>
         <EntityType Name="User">

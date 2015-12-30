@@ -81,7 +81,6 @@ namespace MoneyCounter.Controllers
 
             Transaction newTransaction = new Transaction()
                 { Amount = transaction.Amount, Date = transaction.Date, Description = transaction.Description, Type = transaction.Type };
-            //newTransaction.Type = transaction.Amount < 0 ? "Expense" : "Income";
             newTransaction.User = db.Users.Where(u => u.Id == transaction.User.Id).ToList()[0];
 
             foreach (var category in transaction.Categories)
@@ -99,7 +98,12 @@ namespace MoneyCounter.Controllers
         [ResponseType(typeof(Transaction))]
         public IHttpActionResult DeleteTransaction(int id)
         {
-            Transaction transaction = db.Transactions.Find(id);
+            Transaction transaction = 
+                db.Transactions
+                .Where(t => t.Id == id)
+                .Include("Categories")
+                .Include("User")
+                .FirstOrDefault();
             if (transaction == null)
             {
                 return NotFound();

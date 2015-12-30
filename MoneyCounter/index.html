@@ -30,21 +30,21 @@
                 <td class="mclist-table-category"><span class=" mclastitem-{{$last}}" ng-repeat="c in t.Categories">{{c.Name}}</span></td>
                 <td class="mclist-table-desc">{{t.Description}}</td>
                 <td class="mclist-table-amount {{t.Type}}">{{t.Amount}}</td>
-                <td class="mclist-table-delete"><input class=" btn btn-default" type="button" value="X" /></td>
+                <td class="mclist-table-delete"><input class=" btn btn-default" type="button" value="X" ng-click="deleteTransaction(t.Id)"/></td>
             </tr>
         </table>
 
-        <form class="input-group" ng-submit="addTransaction()">
+        <form class="input-group mclist-form" ng-submit="addTransaction()">
             <table class="table table-bordered mclist-table">
                 <tr>
-                    <td><input class="form-control" type="date" ng-model="newTransactionDate" /></td>
+                    <td><input class="form-control" type="date" ng-model="newTransactionDate" required /></td>
                     <td>
                         <select class="form-control" ng-model="newTransactionCategory">
                             <option value="{{o.Id}}" ng-repeat="o in categoryList">{{o.Name}}</option>
                         </select>
                     </td>
                     <td><input class="form-control" type="text" placeholder="Description" ng-model="newTransactionDescription" /></td>
-                    <td><input class="form-control" type="number" step="0.01" min="0.00" placeholder="0.00" ng-model="newTransactionAmount" /></td>
+                    <td><input class="form-control" type="number" step="0.01" min="0.00" placeholder="0.00" ng-model="newTransactionAmount" required /></td>
                     <td>
                         <select class="form-control" ng-model="newTransactionType">
                             <option value="Expense">Expense</option>

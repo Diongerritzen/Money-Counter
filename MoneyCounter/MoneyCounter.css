@@ -35,6 +35,10 @@
     content: ', ';
 }
 
+.mclist-form {
+    width: auto;
+}
+
 .Expense {
     color: red;
 }
