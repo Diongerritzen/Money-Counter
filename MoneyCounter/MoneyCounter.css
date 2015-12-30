@@ -2,7 +2,7 @@
 }
 
 .mclist-container {
-    min-width:800px;
+    min-width:600px;
     width: 50%;
     margin-top:15px;
     padding-top:15px;
@@ -27,6 +27,9 @@
     width: 80px;
     text-align: right;
 }
+.mclist-table-edit {
+    width: 1px;
+}
 .mclist-table-delete {
     width: 1px;
 }
@@ -35,8 +38,17 @@
     content: ', ';
 }
 
-.mclist-form {
-    width: auto;
+.btn-edit {
+    background-image: url(res/edit-icon.png);
+    border: 0;
+    width: 32px;
+    height: 32px;
+}
+.btn-delete {
+    background-image: url(res/delete-icon.png);
+    border: 0;
+    width: 32px;
+    height: 32px;
 }
 
 .Expense {

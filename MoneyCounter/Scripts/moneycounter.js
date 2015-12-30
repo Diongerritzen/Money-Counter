@@ -12,6 +12,8 @@ app.controller('TransactionsController', function ($scope, $http, jsonPointerPar
     $scope.newTransactionDate = new Date();
     $scope.newTransactionCategory = '1';
     $scope.newTransactionType = 'Expense';
+    $scope.showEditForm = false;
+    $scope.editableTransaction = {};
     
     $scope.addTransaction = function () {
         var date = $scope.newTransactionDate;
@@ -39,6 +41,51 @@ app.controller('TransactionsController', function ($scope, $http, jsonPointerPar
         $scope.newTransactionAmount = '';
     }
     
+    $scope.showEditTransaction = function (transaction)
+    {
+        $scope.editTransactionDate = new Date(transaction.Date);
+        $scope.editTransactionCategory = transaction.Categories[0].Id + '';
+        $scope.editTransactionDescription = transaction.Description;
+        $scope.editTransactionAmount = parseFloat(transaction.Amount);
+        $scope.editTransactionType = transaction.Type;
+
+        $scope.editableTransaction = transaction;
+        $scope.showEditForm = true;
+    }
+
+    $scope.cancelEditTransaction = function ()
+    {
+        $scope.editableTransaction = {};
+        $scope.showEditForm = false;
+    }
+
+    $scope.editTransaction = function ()
+    {
+        var date = $scope.editTransactionDate;
+        var utcdate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+        var editedTransaction = {
+            Date: utcdate,
+            Categories: [{ Id: $scope.editTransactionCategory }],
+            Description: $scope.editTransactionDescription,
+            Amount: $scope.editTransactionAmount,
+            Type: $scope.editTransactionType,
+            User: { Id: $scope.editableTransaction.User.Id },
+            Id: $scope.editableTransaction.Id
+        };
+
+        $http.put(url + '/' + editedTransaction.Id, editedTransaction)
+            .success(function () {
+                getTransactionList();
+            })
+            .error(function () {
+                alert('failure in editTransaction');
+            });
+
+
+        $scope.editableTransaction = {};
+        $scope.showEditForm = false;
+    }
+
     $scope.deleteTransaction = function (id) {
         $http.delete(url + '/' + id)
             .success(function () {

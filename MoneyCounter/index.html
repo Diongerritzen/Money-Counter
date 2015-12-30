@@ -18,23 +18,29 @@
 
         <!-- transaction list -->
         <table class="table mclist-table">
-            <!--<tr>
+            <tr>
                 <td>Date</td>
                 <td>Category</td>
                 <td>Description</td>
                 <td>Amount</td>
-                <td></td>
-            </tr>-->
+                <td>Edit</td>
+                <td>Delete</td>
+            </tr>
             <tr ng-repeat="t in transactionList">
                 <td class="mclist-table-date">{{t.Date}}</td>
                 <td class="mclist-table-category"><span class=" mclastitem-{{$last}}" ng-repeat="c in t.Categories">{{c.Name}}</span></td>
                 <td class="mclist-table-desc">{{t.Description}}</td>
                 <td class="mclist-table-amount {{t.Type}}">{{t.Amount}}</td>
-                <td class="mclist-table-delete"><input class=" btn btn-default" type="button" value="X" ng-click="deleteTransaction(t.Id)"/></td>
+                <td class="mclist-table-edit">
+                    <input class="btn btn-default btn-edit" type="button" value="" ng-click="showEditTransaction(t)" />
+                </td>
+                <td class="mclist-table-delete">
+                    <input class="btn btn-default btn-delete" type="button" value="" ng-click="deleteTransaction(t.Id)" />
+                </td>
             </tr>
         </table>
 
-        <form class="input-group mclist-form" ng-submit="addTransaction()">
+        <form class="input-group" ng-submit="addTransaction()" ng-hide="showEditForm">
             <table class="table table-bordered mclist-table">
                 <tr>
                     <td><input class="form-control" type="date" ng-model="newTransactionDate" required /></td>
@@ -44,7 +50,7 @@
                         </select>
                     </td>
                     <td><input class="form-control" type="text" placeholder="Description" ng-model="newTransactionDescription" /></td>
-                    <td><input class="form-control" type="number" step="0.01" min="0.00" placeholder="0.00" ng-model="newTransactionAmount" required /></td>
+                    <td><input class="form-control mclist-table-amount" type="number" step="0.01" min="0.00" placeholder="0.00" ng-model="newTransactionAmount" required /></td>
                     <td>
                         <select class="form-control" ng-model="newTransactionType">
                             <option value="Expense">Expense</option>
@@ -53,7 +59,34 @@
                     </td>
                     <td>
                         <span class="input-group-btn">
-                            <input class="btn btn-default" type="submit" value="Add">
+                            <input class="btn btn-default" type="submit" value="Add" />
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </form>
+
+        <form class="input-group" ng-submit="editTransaction()" ng-show="showEditForm">
+            <table class="table table-bordered mclist-table">
+                <tr>
+                    <td><input class="form-control" type="date" ng-model="editTransactionDate" required /></td>
+                    <td>
+                        <select class="form-control" ng-model="editTransactionCategory">
+                            <option value="{{o.Id}}" ng-repeat="o in categoryList">{{o.Name}}</option>
+                        </select>
+                    </td>
+                    <td><input class="form-control" type="text" placeholder="Description" ng-model="editTransactionDescription" /></td>
+                    <td><input class="form-control" type="number" step="0.01" min="0.00" placeholder="0.00" ng-model="editTransactionAmount" required /></td>
+                    <td>
+                        <select class="form-control" ng-model="editTransactionType">
+                            <option value="Expense">Expense</option>
+                            <option value="Income">Income</option>
+                        </select>
+                    </td>
+                    <td>
+                        <span class="input-group-btn">
+                            <input class="btn btn-default" type="submit" value="Edit" />
+                            <input class="btn btn-default" type="button" value="Cancel" ng-click="cancelEditTransaction()" />
                         </span>
                     </td>
                 </tr>
