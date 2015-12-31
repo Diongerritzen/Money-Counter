@@ -14,18 +14,13 @@ namespace MoneyCounter.Models
     
     public partial class Recurrence
     {
-        public Recurrence()
-        {
-            this.Categories = new HashSet<Category>();
-        }
-    
         public int Id { get; set; }
         public decimal Amount { get; set; }
         public string Description { get; set; }
         public short TimeInterval { get; set; }
         public string TransactionType { get; set; }
     
-        public virtual ICollection<Category> Categories { get; set; }
+        public virtual Category Category { get; set; }
         public virtual User User { get; set; }
     }
 }

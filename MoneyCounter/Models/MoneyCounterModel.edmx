@@ -4,39 +4,29 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="UserModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-  <EntityContainer Name="UserModelStoreContainer">
-    <EntitySet Name="Transactions" EntityType="UserModel.Store.Transactions" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Categories" EntityType="UserModel.Store.Categories" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Users" EntityType="UserModel.Store.Users" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="Recurrences" EntityType="UserModel.Store.Recurrences" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="CategoryTransaction" EntityType="UserModel.Store.CategoryTransaction" store:Type="Tables" Schema="dbo" />
-    <EntitySet Name="CategoryRecurrence" EntityType="UserModel.Store.CategoryRecurrence" store:Type="Tables" Schema="dbo" />
-    <AssociationSet Name="FK_CategoryTransaction_Category" Association="UserModel.Store.FK_CategoryTransaction_Category">
+    <Schema Namespace="MoneyCounterModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="MoneyCounterModelStoreContainer">
+    <EntitySet Name="Transactions" EntityType="MoneyCounterModel.Store.Transactions" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Categories" EntityType="MoneyCounterModel.Store.Categories" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Users" EntityType="MoneyCounterModel.Store.Users" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Recurrences" EntityType="MoneyCounterModel.Store.Recurrences" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="CategoryTransaction" Association="MoneyCounterModel.Store.CategoryTransaction">
       <End Role="Category" EntitySet="Categories" />
-      <End Role="CategoryTransaction" EntitySet="CategoryTransaction" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CategoryTransaction_Transaction" Association="UserModel.Store.FK_CategoryTransaction_Transaction">
       <End Role="Transaction" EntitySet="Transactions" />
-      <End Role="CategoryTransaction" EntitySet="CategoryTransaction" />
     </AssociationSet>
-    <AssociationSet Name="UserTransaction" Association="UserModel.Store.UserTransaction">
+    <AssociationSet Name="UserTransaction" Association="MoneyCounterModel.Store.UserTransaction">
       <End Role="User" EntitySet="Users" />
       <End Role="Transaction" EntitySet="Transactions" />
     </AssociationSet>
-    <AssociationSet Name="FK_CategoryRecurrence_Category" Association="UserModel.Store.FK_CategoryRecurrence_Category">
+    <AssociationSet Name="CategoryRecurrence" Association="MoneyCounterModel.Store.CategoryRecurrence">
       <End Role="Category" EntitySet="Categories" />
-      <End Role="CategoryRecurrence" EntitySet="CategoryRecurrence" />
-    </AssociationSet>
-    <AssociationSet Name="FK_CategoryRecurrence_Recurrence" Association="UserModel.Store.FK_CategoryRecurrence_Recurrence">
       <End Role="Recurrence" EntitySet="Recurrences" />
-      <End Role="CategoryRecurrence" EntitySet="CategoryRecurrence" />
     </AssociationSet>
-    <AssociationSet Name="UserRecurrence" Association="UserModel.Store.UserRecurrence">
+    <AssociationSet Name="UserRecurrence" Association="MoneyCounterModel.Store.UserRecurrence">
       <End Role="User" EntitySet="Users" />
       <End Role="Recurrence" EntitySet="Recurrences" />
     </AssociationSet>
-    <AssociationSet Name="UserCategory" Association="UserModel.Store.UserCategory">
+    <AssociationSet Name="UserCategory" Association="MoneyCounterModel.Store.UserCategory">
       <End Role="User" EntitySet="Users" />
       <End Role="Category" EntitySet="Categories" />
     </AssociationSet>
@@ -50,6 +40,7 @@
     <Property Name="Amount" Type="decimal" Nullable="false" />
     <Property Name="Type" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Description" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Category_Id" Type="int" Nullable="false" />
     <Property Name="User_Id" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Categories">
@@ -81,27 +72,24 @@
     <Property Name="Description" Type="nvarchar(max)" Nullable="true" />
     <Property Name="TimeInterval" Type="smallint" Nullable="false" />
     <Property Name="TransactionType" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Category_Id" Type="int" Nullable="false" />
     <Property Name="User_Id" Type="int" Nullable="false" />
   </EntityType>
-  <EntityType Name="CategoryTransaction">
-    <Key>
-      <PropertyRef Name="Category_Id" />
-      <PropertyRef Name="Transaction_Id" />
-    </Key>
-    <Property Name="Category_Id" Type="int" Nullable="false" />
-    <Property Name="Transaction_Id" Type="int" Nullable="false" />
-  </EntityType>
-  <EntityType Name="CategoryRecurrence">
-    <Key>
-      <PropertyRef Name="Category_Id" />
-      <PropertyRef Name="Recurrence_Id" />
-    </Key>
-    <Property Name="Category_Id" Type="int" Nullable="false" />
-    <Property Name="Recurrence_Id" Type="int" Nullable="false" />
-  </EntityType>
+  <Association Name="CategoryTransaction">
+    <End Role="Category" Type="MoneyCounterModel.Store.Categories" Multiplicity="1" />
+    <End Role="Transaction" Type="MoneyCounterModel.Store.Transactions" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Transaction">
+        <PropertyRef Name="Category_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="UserTransaction">
-    <End Role="User" Type="UserModel.Store.Users" Multiplicity="1" />
-    <End Role="Transaction" Type="UserModel.Store.Transactions" Multiplicity="*" />
+    <End Role="User" Type="MoneyCounterModel.Store.Users" Multiplicity="1" />
+    <End Role="Transaction" Type="MoneyCounterModel.Store.Transactions" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="User">
         <PropertyRef Name="Id" />
@@ -111,9 +99,21 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="CategoryRecurrence">
+    <End Role="Category" Type="MoneyCounterModel.Store.Categories" Multiplicity="1" />
+    <End Role="Recurrence" Type="MoneyCounterModel.Store.Recurrences" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Recurrence">
+        <PropertyRef Name="Category_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="UserRecurrence">
-    <End Role="User" Type="UserModel.Store.Users" Multiplicity="1" />
-    <End Role="Recurrence" Type="UserModel.Store.Recurrences" Multiplicity="*" />
+    <End Role="User" Type="MoneyCounterModel.Store.Users" Multiplicity="1" />
+    <End Role="Recurrence" Type="MoneyCounterModel.Store.Recurrences" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="User">
         <PropertyRef Name="Id" />
@@ -124,8 +124,8 @@
     </ReferentialConstraint>
   </Association>
   <Association Name="UserCategory">
-    <End Role="User" Type="UserModel.Store.Users" Multiplicity="1" />
-    <End Role="Category" Type="UserModel.Store.Categories" Multiplicity="*" />
+    <End Role="User" Type="MoneyCounterModel.Store.Users" Multiplicity="1" />
+    <End Role="Category" Type="MoneyCounterModel.Store.Categories" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="User">
         <PropertyRef Name="Id" />
@@ -135,80 +135,32 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_CategoryTransaction_Category">
-    <End Role="Category" Type="UserModel.Store.Categories" Multiplicity="1" />
-    <End Role="CategoryTransaction" Type="UserModel.Store.CategoryTransaction" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Category">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="CategoryTransaction">
-        <PropertyRef Name="Category_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CategoryTransaction_Transaction">
-    <End Role="CategoryTransaction" Type="UserModel.Store.CategoryTransaction" Multiplicity="*" />
-    <End Role="Transaction" Type="UserModel.Store.Transactions" Multiplicity="1" />
-    <ReferentialConstraint>
-      <Principal Role="Transaction">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="CategoryTransaction">
-        <PropertyRef Name="Transaction_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CategoryRecurrence_Category">
-    <End Role="Category" Type="UserModel.Store.Categories" Multiplicity="1" />
-    <End Role="CategoryRecurrence" Type="UserModel.Store.CategoryRecurrence" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Category">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="CategoryRecurrence">
-        <PropertyRef Name="Category_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_CategoryRecurrence_Recurrence">
-    <End Role="CategoryRecurrence" Type="UserModel.Store.CategoryRecurrence" Multiplicity="*" />
-    <End Role="Recurrence" Type="UserModel.Store.Recurrences" Multiplicity="1" />
-    <ReferentialConstraint>
-      <Principal Role="Recurrence">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="CategoryRecurrence">
-        <PropertyRef Name="Recurrence_Id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
 </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="UserModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
-        <EntityContainer Name="UserModelContainer" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Transactions" EntityType="UserModel.Transaction" />
-          <EntitySet Name="Categories" EntityType="UserModel.Category" />
-          <AssociationSet Name="CategoryTransaction" Association="UserModel.CategoryTransaction">
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="MoneyCounterModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="MoneyCounterContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Transactions" EntityType="MoneyCounterModel.Transaction" />
+          <EntitySet Name="Categories" EntityType="MoneyCounterModel.Category" />
+          <AssociationSet Name="CategoryTransaction" Association="MoneyCounterModel.CategoryTransaction">
             <End Role="Category" EntitySet="Categories" />
             <End Role="Transaction" EntitySet="Transactions" />
           </AssociationSet>
-          <EntitySet Name="Users" EntityType="UserModel.User" />
-          <AssociationSet Name="UserTransaction" Association="UserModel.UserTransaction">
+          <EntitySet Name="Users" EntityType="MoneyCounterModel.User" />
+          <AssociationSet Name="UserTransaction" Association="MoneyCounterModel.UserTransaction">
             <End Role="User" EntitySet="Users" />
             <End Role="Transaction" EntitySet="Transactions" />
           </AssociationSet>
-          <EntitySet Name="Recurrences" EntityType="UserModel.Recurrence" />
-          <AssociationSet Name="CategoryRecurrence" Association="UserModel.CategoryRecurrence">
+          <EntitySet Name="Recurrences" EntityType="MoneyCounterModel.Recurrence" />
+          <AssociationSet Name="CategoryRecurrence" Association="MoneyCounterModel.CategoryRecurrence">
             <End Role="Category" EntitySet="Categories" />
             <End Role="Recurrence" EntitySet="Recurrences" />
           </AssociationSet>
-          <AssociationSet Name="UserRecurrence" Association="UserModel.UserRecurrence">
+          <AssociationSet Name="UserRecurrence" Association="MoneyCounterModel.UserRecurrence">
             <End Role="User" EntitySet="Users" />
             <End Role="Recurrence" EntitySet="Recurrences" />
           </AssociationSet>
-          <AssociationSet Name="UserCategory" Association="UserModel.UserCategory">
+          <AssociationSet Name="UserCategory" Association="MoneyCounterModel.UserCategory">
             <End Role="User" EntitySet="Users" />
             <End Role="Category" EntitySet="Categories" />
           </AssociationSet>
@@ -222,8 +174,8 @@
           <Property Name="Amount" Type="Decimal" Nullable="false" />
           <Property Name="Type" Type="String" Nullable="false" />
           <Property Name="Description" Type="String" Nullable="true" />
-          <NavigationProperty Name="Categories" Relationship="UserModel.CategoryTransaction" FromRole="Transaction" ToRole="Category" />
-          <NavigationProperty Name="User" Relationship="UserModel.UserTransaction" FromRole="Transaction" ToRole="User" />
+          <NavigationProperty Name="Category" Relationship="MoneyCounterModel.CategoryTransaction" FromRole="Transaction" ToRole="Category" />
+          <NavigationProperty Name="User" Relationship="MoneyCounterModel.UserTransaction" FromRole="Transaction" ToRole="User" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -232,14 +184,14 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="true" />
           <Property Name="TransactionType" Type="String" Nullable="false" />
-          <NavigationProperty Name="Transactions" Relationship="UserModel.CategoryTransaction" FromRole="Category" ToRole="Transaction" />
-          <NavigationProperty Name="Recurrences" Relationship="UserModel.CategoryRecurrence" FromRole="Category" ToRole="Recurrence" />
-          <NavigationProperty Name="User" Relationship="UserModel.UserCategory" FromRole="Category" ToRole="User" />
+          <NavigationProperty Name="Transactions" Relationship="MoneyCounterModel.CategoryTransaction" FromRole="Category" ToRole="Transaction" />
+          <NavigationProperty Name="Recurrences" Relationship="MoneyCounterModel.CategoryRecurrence" FromRole="Category" ToRole="Recurrence" />
+          <NavigationProperty Name="User" Relationship="MoneyCounterModel.UserCategory" FromRole="Category" ToRole="User" />
         </EntityType>
         <Association Name="CategoryTransaction">
-          <End Type="UserModel.Category" Role="Category" Multiplicity="*" >
+          <End Type="MoneyCounterModel.Category" Role="Category" Multiplicity="1" >
           </End>
-          <End Type="UserModel.Transaction" Role="Transaction" Multiplicity="*" />
+          <End Type="MoneyCounterModel.Transaction" Role="Transaction" Multiplicity="*" />
         </Association>
         <EntityType Name="User">
           <Key>
@@ -248,16 +200,16 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Email" Type="String" Nullable="false" />
           <Property Name="Password" Type="String" Nullable="false" />
-          <NavigationProperty Name="Transactions" Relationship="UserModel.UserTransaction" FromRole="User" ToRole="Transaction" />
+          <NavigationProperty Name="Transactions" Relationship="MoneyCounterModel.UserTransaction" FromRole="User" ToRole="Transaction" />
           <Property Name="FirstName" Type="String" Nullable="true" />
           <Property Name="LastName" Type="String" Nullable="true" />
           <Property Name="UserType" Type="String" Nullable="false" cg:SetterAccess="Private" />
-          <NavigationProperty Name="Recurrences" Relationship="UserModel.UserRecurrence" FromRole="User" ToRole="Recurrence" />
-          <NavigationProperty Name="Categories" Relationship="UserModel.UserCategory" FromRole="User" ToRole="Category" />
+          <NavigationProperty Name="Recurrences" Relationship="MoneyCounterModel.UserRecurrence" FromRole="User" ToRole="Recurrence" />
+          <NavigationProperty Name="Categories" Relationship="MoneyCounterModel.UserCategory" FromRole="User" ToRole="Category" />
         </EntityType>
         <Association Name="UserTransaction">
-          <End Type="UserModel.User" Role="User" Multiplicity="1" />
-          <End Type="UserModel.Transaction" Role="Transaction" Multiplicity="*" />
+          <End Type="MoneyCounterModel.User" Role="User" Multiplicity="1" />
+          <End Type="MoneyCounterModel.Transaction" Role="Transaction" Multiplicity="*" />
         </Association>
         <EntityType Name="Recurrence">
           <Key>
@@ -268,29 +220,29 @@
           <Property Name="Description" Type="String" Nullable="true" />
           <Property Name="TimeInterval" Type="Int16" Nullable="false" />
           <Property Name="TransactionType" Type="String" Nullable="false" />
-          <NavigationProperty Name="Categories" Relationship="UserModel.CategoryRecurrence" FromRole="Recurrence" ToRole="Category" />
-          <NavigationProperty Name="User" Relationship="UserModel.UserRecurrence" FromRole="Recurrence" ToRole="User" />
+          <NavigationProperty Name="Category" Relationship="MoneyCounterModel.CategoryRecurrence" FromRole="Recurrence" ToRole="Category" />
+          <NavigationProperty Name="User" Relationship="MoneyCounterModel.UserRecurrence" FromRole="Recurrence" ToRole="User" />
         </EntityType>
         <Association Name="CategoryRecurrence">
-          <End Type="UserModel.Category" Role="Category" Multiplicity="*" />
-          <End Type="UserModel.Recurrence" Role="Recurrence" Multiplicity="*" />
+          <End Type="MoneyCounterModel.Category" Role="Category" Multiplicity="1" />
+          <End Type="MoneyCounterModel.Recurrence" Role="Recurrence" Multiplicity="*" />
         </Association>
         <Association Name="UserRecurrence">
-          <End Type="UserModel.User" Role="User" Multiplicity="1" />
-          <End Type="UserModel.Recurrence" Role="Recurrence" Multiplicity="*" />
+          <End Type="MoneyCounterModel.User" Role="User" Multiplicity="1" />
+          <End Type="MoneyCounterModel.Recurrence" Role="Recurrence" Multiplicity="*" />
         </Association>
         <Association Name="UserCategory">
-          <End Type="UserModel.User" Role="User" Multiplicity="1" />
-          <End Type="UserModel.Category" Role="Category" Multiplicity="*" />
+          <End Type="MoneyCounterModel.User" Role="User" Multiplicity="1" />
+          <End Type="MoneyCounterModel.Category" Role="Category" Multiplicity="*" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
     <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="UserModelStoreContainer" CdmEntityContainer="UserModelContainer">
+  <EntityContainerMapping StorageEntityContainer="MoneyCounterModelStoreContainer" CdmEntityContainer="MoneyCounterContainer">
     <EntitySetMapping Name="Transactions">
-      <EntityTypeMapping TypeName="IsTypeOf(UserModel.Transaction)">
+      <EntityTypeMapping TypeName="IsTypeOf(MoneyCounterModel.Transaction)">
         <MappingFragment StoreEntitySet="Transactions">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Date" ColumnName="Date" />
@@ -301,7 +253,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Categories">
-      <EntityTypeMapping TypeName="IsTypeOf(UserModel.Category)">
+      <EntityTypeMapping TypeName="IsTypeOf(MoneyCounterModel.Category)">
         <MappingFragment StoreEntitySet="Categories">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
@@ -310,7 +262,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Users">
-      <EntityTypeMapping TypeName="IsTypeOf(UserModel.User)">
+      <EntityTypeMapping TypeName="IsTypeOf(MoneyCounterModel.User)">
         <MappingFragment StoreEntitySet="Users">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Email" ColumnName="Email" />
@@ -322,7 +274,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Recurrences">
-      <EntityTypeMapping TypeName="IsTypeOf(UserModel.Recurrence)">
+      <EntityTypeMapping TypeName="IsTypeOf(MoneyCounterModel.Recurrence)">
         <MappingFragment StoreEntitySet="Recurrences">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Amount" ColumnName="Amount" />
@@ -332,15 +284,15 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <AssociationSetMapping Name="CategoryTransaction" TypeName="UserModel.CategoryTransaction" StoreEntitySet="CategoryTransaction">
+    <AssociationSetMapping Name="CategoryTransaction" TypeName="MoneyCounterModel.CategoryTransaction" StoreEntitySet="Transactions">
       <EndProperty Name="Category">
         <ScalarProperty Name="Id" ColumnName="Category_Id" />
       </EndProperty>
       <EndProperty Name="Transaction">
-        <ScalarProperty Name="Id" ColumnName="Transaction_Id" />
+        <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="UserTransaction" TypeName="UserModel.UserTransaction" StoreEntitySet="Transactions">
+    <AssociationSetMapping Name="UserTransaction" TypeName="MoneyCounterModel.UserTransaction" StoreEntitySet="Transactions">
       <EndProperty Name="User">
         <ScalarProperty Name="Id" ColumnName="User_Id" />
       </EndProperty>
@@ -348,15 +300,15 @@
         <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="CategoryRecurrence" TypeName="UserModel.CategoryRecurrence" StoreEntitySet="CategoryRecurrence">
+    <AssociationSetMapping Name="CategoryRecurrence" TypeName="MoneyCounterModel.CategoryRecurrence" StoreEntitySet="Recurrences">
       <EndProperty Name="Category">
         <ScalarProperty Name="Id" ColumnName="Category_Id" />
       </EndProperty>
       <EndProperty Name="Recurrence">
-        <ScalarProperty Name="Id" ColumnName="Recurrence_Id" />
+        <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="UserRecurrence" TypeName="UserModel.UserRecurrence" StoreEntitySet="Recurrences">
+    <AssociationSetMapping Name="UserRecurrence" TypeName="MoneyCounterModel.UserRecurrence" StoreEntitySet="Recurrences">
       <EndProperty Name="User">
         <ScalarProperty Name="Id" ColumnName="User_Id" />
       </EndProperty>
@@ -364,7 +316,7 @@
         <ScalarProperty Name="Id" ColumnName="Id" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="UserCategory" TypeName="UserModel.UserCategory" StoreEntitySet="Categories">
+    <AssociationSetMapping Name="UserCategory" TypeName="MoneyCounterModel.UserCategory" StoreEntitySet="Categories">
       <EndProperty Name="User">
         <ScalarProperty Name="Id" ColumnName="User_Id" />
       </EndProperty>

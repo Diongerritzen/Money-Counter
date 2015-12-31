@@ -14,7 +14,7 @@ namespace MoneyCounter.Controllers
 {
     public class TransactionsController : ApiController
     {
-        private UserModelContainer db = new UserModelContainer();
+        private MoneyCounterContainer db = new MoneyCounterContainer();
 
         // GET: api/Transactions
         public IQueryable<Transaction> GetTransactions()
@@ -49,7 +49,18 @@ namespace MoneyCounter.Controllers
                 return BadRequest();
             }
 
-            db.Entry(transaction).State = EntityState.Modified;
+            Transaction oldTransaction = 
+                db.Transactions
+                .Where(t => t.Id == id)
+                .Include("Category")
+                .Include("User")
+                .FirstOrDefault();
+            Transaction newTransaction = ResolveTransactionObjects(transaction);
+
+            db.Transactions.Remove(oldTransaction);
+            db.Transactions.Add(transaction);
+
+            //db.Entry(transaction).State = EntityState.Modified;
 
             try
             {
@@ -79,14 +90,7 @@ namespace MoneyCounter.Controllers
                 return BadRequest(ModelState);
             }
 
-            Transaction newTransaction = new Transaction()
-                { Amount = transaction.Amount, Date = transaction.Date, Description = transaction.Description, Type = transaction.Type };
-            newTransaction.User = db.Users.Where(u => u.Id == transaction.User.Id).ToList()[0];
-
-            foreach (var category in transaction.Categories)
-            {
-                newTransaction.Categories.Add(db.Categories.Where(c => c.Id == category.Id).ToList()[0]);
-            }
+            Transaction newTransaction = ResolveTransactionObjects(transaction);
 
             db.Transactions.Add(newTransaction);
             db.SaveChanges();
@@ -101,7 +105,7 @@ namespace MoneyCounter.Controllers
             Transaction transaction = 
                 db.Transactions
                 .Where(t => t.Id == id)
-                .Include("Categories")
+                .Include("Category")
                 .Include("User")
                 .FirstOrDefault();
             if (transaction == null)
@@ -127,6 +131,14 @@ namespace MoneyCounter.Controllers
         private bool TransactionExists(int id)
         {
             return db.Transactions.Count(e => e.Id == id) > 0;
+        }
+
+        private Transaction ResolveTransactionObjects (Transaction transaction)
+        {
+            transaction.User = db.Users.Where(u => u.Id == transaction.User.Id).FirstOrDefault();
+            transaction.Category = db.Categories.Where(c => c.Id == transaction.Category.Id).FirstOrDefault();
+
+            return transaction;
         }
     }
 }

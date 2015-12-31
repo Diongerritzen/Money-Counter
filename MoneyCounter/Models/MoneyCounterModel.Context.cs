@@ -13,10 +13,10 @@ namespace MoneyCounter.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class UserModelContainer : DbContext
+    public partial class MoneyCounterContainer : DbContext
     {
-        public UserModelContainer()
-            : base("name=UserModelContainer")
+        public MoneyCounterContainer()
+            : base("name=MoneyCounterContainer")
         {
         }
     

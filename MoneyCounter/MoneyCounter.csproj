@@ -89,6 +89,14 @@
     <Content Include="index.html" />
     <Content Include="moneycounter.css" />
     <Content Include="Scripts\angular-mocks.js" />
+    <Content Include="Models\MoneyCounterModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MoneyCounterModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\MoneyCounterModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MoneyCounterModel.cs</LastGenOutput>
+    </Content>
     <None Include="Scripts\angular.intellisense.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
@@ -111,52 +119,42 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Category.cs">
-      <DependentUpon>UserModel.tt</DependentUpon>
+      <DependentUpon>MoneyCounterModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MoneyCounterModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MoneyCounterModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MoneyCounterModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MoneyCounterModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\MoneyCounterModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MoneyCounterModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Recurrence.cs">
-      <DependentUpon>UserModel.tt</DependentUpon>
+      <DependentUpon>MoneyCounterModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Transaction.cs">
-      <DependentUpon>UserModel.tt</DependentUpon>
+      <DependentUpon>MoneyCounterModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">
-      <DependentUpon>UserModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\UserModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UserModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\UserModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UserModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\UserModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UserModel.edmx</DependentUpon>
+      <DependentUpon>MoneyCounterModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <EntityDeploy Include="Models\UserModel.edmx">
+    <EntityDeploy Include="Models\MoneyCounterModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>UserModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>MoneyCounterModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\UserModel.edmx.diagram">
-      <DependentUpon>UserModel.edmx</DependentUpon>
-    </Content>
-    <Content Include="Models\UserModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>UserModel.Context.cs</LastGenOutput>
-      <DependentUpon>UserModel.edmx</DependentUpon>
-    </Content>
-    <Content Include="Models\UserModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>UserModel.cs</LastGenOutput>
-      <DependentUpon>UserModel.edmx</DependentUpon>
+    <Content Include="Models\MoneyCounterModel.edmx.diagram">
+      <DependentUpon>MoneyCounterModel.edmx</DependentUpon>
     </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

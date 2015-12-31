@@ -14,7 +14,7 @@ namespace MoneyCounter.Controllers
 {
     public class CategoriesController : ApiController
     {
-        private UserModelContainer db = new UserModelContainer();
+        private MoneyCounterContainer db = new MoneyCounterContainer();
 
         // GET: api/Categories
         public IQueryable<Category> GetCategories()

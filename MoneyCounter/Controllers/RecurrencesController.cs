@@ -14,7 +14,7 @@ namespace MoneyCounter.Controllers
 {
     public class RecurrencesController : ApiController
     {
-        private UserModelContainer db = new UserModelContainer();
+        private MoneyCounterContainer db = new MoneyCounterContainer();
 
         // GET: api/Recurrences
         public IQueryable<Recurrence> GetRecurrences()

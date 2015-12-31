@@ -11,18 +11,22 @@ app.controller('TransactionsController', function ($scope, $http, jsonPointerPar
     
     // default values for add/edit transaction form
     $scope.transactionDateInput = new Date();
-    $scope.transactionCategoryInput = '1';
+    $scope.transactionCategoryInput = '2';
     $scope.transactionTypeInput = 'Expense';
     $scope.transactionOrdering = 'Date';
     $scope.showEditForm = false;
     $scope.editableTransaction = {};
-    
+
+    $scope.setDefaultCategory = function () {
+        $scope.transactionCategoryInput = $scope.transactionTypeInput == 'Expense' ? ('' + $scope.categoryExpenseList[0].Id) : ('' + $scope.categoryIncomeList[0].Id);
+    }
+
     $scope.addTransaction = function () {
         var date = $scope.transactionDateInput;
         var utcdate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
         var newTransaction = {
             Date: utcdate,
-            Categories: [{ Id: $scope.transactionCategoryInput }],
+            Category: { Id: $scope.transactionCategoryInput },
             Description: $scope.transactionDescriptionInput,
             Amount: $scope.transactionAmountInput,
             Type: $scope.transactionTypeInput,
@@ -38,7 +42,7 @@ app.controller('TransactionsController', function ($scope, $http, jsonPointerPar
             });
     
         $scope.transactionDateInput = new Date();
-        $scope.transactionCategoryInput = '1';
+        $scope.setDefaultCategory();
         $scope.transactionDescriptionInput = '';
         $scope.transactionAmountInput = '';
     }
@@ -46,7 +50,7 @@ app.controller('TransactionsController', function ($scope, $http, jsonPointerPar
     $scope.showEditTransaction = function (transaction)
     {
         $scope.transactionDateInput = new Date(transaction.Date);
-        $scope.transactionCategoryInput = transaction.Categories[0].Id + '';
+        $scope.transactionCategoryInput = transaction.Category.Id + '';
         $scope.transactionDescriptionInput = transaction.Description;
         $scope.transactionAmountInput = parseFloat(transaction.Amount);
         $scope.transactionTypeInput = transaction.Type;
@@ -58,7 +62,7 @@ app.controller('TransactionsController', function ($scope, $http, jsonPointerPar
     $scope.closeEditTransaction = function ()
     {
         $scope.transactionDateInput = new Date();
-        $scope.transactionCategoryInput = '1';
+        $scope.setDefaultCategory();
         $scope.transactionDescriptionInput = '';
         $scope.transactionAmountInput = '';
         $scope.transactionTypeInput = 'Expense';
@@ -73,7 +77,7 @@ app.controller('TransactionsController', function ($scope, $http, jsonPointerPar
         var utcdate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
         var editedTransaction = {
             Date: utcdate,
-            Categories: [{ Id: $scope.transactionCategoryInput }],
+            Category: { Id: $scope.transactionCategoryInput },
             Description: $scope.transactionDescriptionInput,
             Amount: $scope.transactionAmountInput,
             Type: $scope.transactionTypeInput,
@@ -109,7 +113,6 @@ app.controller('TransactionsController', function ($scope, $http, jsonPointerPar
                 $scope.transactionList = jsonPointerParseService.pointerParse(data, 5);
     
                 angular.forEach($scope.transactionList, function (transaction, index) {
-                    $scope.transactionList[index].Amount = transaction.Amount.toFixed(2);
                     $scope.transactionList[index].Date = moment(transaction.Date).format('L');
                 });
             })
