@@ -13,6 +13,7 @@ app.controller('TransactionsController', function ($scope, $http, jsonPointerPar
     $scope.transactionDateInput = new Date();
     $scope.transactionCategoryInput = '1';
     $scope.transactionTypeInput = 'Expense';
+    $scope.transactionOrdering = 'Date';
     $scope.showEditForm = false;
     $scope.editableTransaction = {};
     

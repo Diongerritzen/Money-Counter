@@ -19,16 +19,16 @@
         <!-- transaction list -->
         <table class="table mclist-table">
             <tr>
-                <td>Date</td>
-                <td>Category</td>
-                <td>Description</td>
-                <td>Amount</td>
+                <td ng-click="transactionOrdering = 'Date'">Date</td>
+                <td ng-click="transactionOrdering = 'Categories[0].Name'">Category</td>
+                <td ng-click="transactionOrdering = 'Description'">Description</td>
+                <td ng-click="transactionOrdering = 'Type === \'Income\' ? parseFloat(Amount) : -parseFloat(Amount)'">Amount</td>
                 <td>Edit</td>
                 <td>Delete</td>
             </tr>
-            <tr ng-repeat="t in transactionList">
+            <tr ng-repeat="t in transactionList | orderBy: transactionOrdering">
                 <td class="mclist-table-date">{{t.Date}}</td>
-                <td class="mclist-table-category"><span class=" mclastitem-{{$last}}" ng-repeat="c in t.Categories">{{c.Name}}</span></td>
+                <td class="mclist-table-category"><span class="mclastitem-{{$last}}" ng-repeat="c in t.Categories">{{c.Name}}</span></td>
                 <td class="mclist-table-desc">{{t.Description}}</td>
                 <td class="mclist-table-amount {{t.Type}}">{{t.Amount}}</td>
                 <td class="mclist-table-edit">
@@ -46,7 +46,8 @@
                     <td><input class="form-control" type="date" ng-model="transactionDateInput" required /></td>
                     <td>
                         <select class="form-control" ng-model="transactionCategoryInput">
-                            <option value="{{c.Id}}" ng-repeat="c in transactionTypeInput == 'Expense' ? categoryExpenseList : categoryIncomeList" ng-selected="{{$first}}">{{c.Name}}</option>
+                            <option value="{{c.Id}}" ng-repeat="c in transactionTypeInput == 'Expense' ? categoryExpenseList : categoryIncomeList"
+                                     ng-selected="{{$first}}">{{c.Name}}</option>
                         </select>
                     </td>
                     <td><input class="form-control" type="text" placeholder="Description" ng-model="transactionDescriptionInput" /></td>
