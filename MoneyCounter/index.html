@@ -13,64 +13,97 @@
     </style>
 </head>
 <body>
+    <div class="container mcapp-container" ng-controller="AppController">
+        
+        <!-- Navigation tabs/buttons -->
+        <div class="input-group-btn">
+            <input class="btn btn-default" type="button" value="Transactions" ng-click="visibleView = 'Transactions'" />
+            <input class="btn btn-default" type="button" value="Statistics" ng-click="visibleView = 'Statistics'" />
+            <input class="btn btn-default" type="button" value="Recurrences" ng-click="visibleView = 'Recurrences'" />
+            <input class="btn btn-default" type="button" value="Categories" ng-click="visibleView = 'Categories'" />
+        </div>
 
-    <div class="container mclist-container" ng-controller="TransactionsController">
+        <!-- Transaction view -->
+        <div class="container mclist-container" ng-controller="TransactionsController" ng-show="visibleView == 'Transactions'">
+            <div class="container scrollable">
+                <table class="table mclist-table">
+                    <thead>
+                        <tr>
+                            <td ng-click="transactionOrdering = 'Date'">Date</td>
+                            <td ng-click="transactionOrdering = 'Category.Name'">Category</td>
+                            <td ng-click="transactionOrdering = 'Description'">Description</td>
+                            <td ng-click="transactionOrdering = 'Type == \'Income\' ? Amount : -Amount'">Amount</td>
+                            <td>Edit</td>
+                            <td>Delete</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!--style="display: block; height:200px; width:600px; overflow-y: auto">-->
+                        <tr ng-repeat="t in transactionList | orderBy: transactionOrdering">
+                            <td class="mclist-table-date">{{t.Date}}</td>
+                            <td class="mclist-table-category">{{t.Category.Name}}</td>
+                            <td class="mclist-table-desc">{{t.Description}}</td>
+                            <td class="mclist-table-amount {{t.Type}}">{{t.Amount.toFixed(2)}}</td>
+                            <td class="mclist-table-edit">
+                                <input class="btn btn-default btn-edit" type="button" value="" ng-click="showEditTransaction(t)" />
+                            </td>
+                            <td class="mclist-table-delete">
+                                <input class="btn btn-default btn-delete" type="button" value="" ng-click="deleteTransaction(t.Id)" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-        <!-- transaction list -->
-        <table class="table mclist-table">
-            <tr>
-                <td ng-click="transactionOrdering = 'Date'">Date</td>
-                <td ng-click="transactionOrdering = 'Category.Name'">Category</td>
-                <td ng-click="transactionOrdering = 'Description'">Description</td>
-                <td ng-click="transactionOrdering = 'Type == \'Income\' ? Amount : -Amount'">Amount</td>
-                <td>Edit</td>
-                <td>Delete</td>
-            </tr>
-            <tr ng-repeat="t in transactionList | orderBy: transactionOrdering">
-                <td class="mclist-table-date">{{t.Date}}</td>
-                <td class="mclist-table-category">{{t.Category.Name}}</td>
-                <td class="mclist-table-desc">{{t.Description}}</td>
-                <td class="mclist-table-amount {{t.Type}}">{{t.Amount.toFixed(2)}}</td>
-                <td class="mclist-table-edit">
-                    <input class="btn btn-default btn-edit" type="button" value="" ng-click="showEditTransaction(t)" />
-                </td>
-                <td class="mclist-table-delete">
-                    <input class="btn btn-default btn-delete" type="button" value="" ng-click="deleteTransaction(t.Id)" />
-                </td>
-            </tr>
-        </table>
+            <form class="input-group" ng-submit="showEditForm ? editTransaction() : addTransaction()">
+                <table class="table table-bordered mclist-table">
+                    <tr>
+                        <td><input class="form-control" type="date" ng-model="transactionDateInput" required /></td>
+                        <td>
+                            <select class="form-control" ng-model="transactionCategoryInput">
+                                <option value="{{c.Id}}" ng-repeat="c in transactionTypeInput == 'Expense' ? categoryExpenseList : categoryIncomeList">{{c.Name}}</option>
+                            </select>
+                        </td>
+                        <td><input class="form-control" type="text" placeholder="Description" ng-model="transactionDescriptionInput" /></td>
+                        <td><input class="form-control" type="number" step="0.01" min="0.00" placeholder="0.00" ng-model="transactionAmountInput" required /></td>
+                        <td>
+                            <select class="form-control" ng-model="transactionTypeInput" ng-change="setDefaultCategory()">
+                                <option value="Expense">Expense</option>
+                                <option value="Income">Income</option>
+                            </select>
+                        </td>
+                        <td>
+                            <span class="input-group-btn" ng-hide="showEditForm">
+                                <input class="btn btn-default" type="submit" value="Add" />
+                            </span>
+                            <span class="input-group-btn" ng-show="showEditForm">
+                                <input class="btn btn-default" type="submit" value="Edit" />
+                                <input class="btn btn-default" type="button" value="Cancel" ng-click="closeEditTransaction()" />
+                            </span>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
 
-        <form class="input-group" ng-submit="showEditForm ? editTransaction() : addTransaction()">
-            <table class="table table-bordered mclist-table">
-                <tr>
-                    <td><input class="form-control" type="date" ng-model="transactionDateInput" required /></td>
-                    <td>
-                        <select class="form-control" ng-model="transactionCategoryInput">
-                            <option value="{{c.Id}}" ng-repeat="c in transactionTypeInput == 'Expense' ? categoryExpenseList : categoryIncomeList">{{c.Name}}</option>
-                        </select>
-                    </td>
-                    <td><input class="form-control" type="text" placeholder="Description" ng-model="transactionDescriptionInput" /></td>
-                    <td><input class="form-control" type="number" step="0.01" min="0.00" placeholder="0.00" ng-model="transactionAmountInput" required /></td>
-                    <td>
-                        <select class="form-control" ng-model="transactionTypeInput" ng-change="setDefaultCategory()">
-                            <option value="Expense">Expense</option>
-                            <option value="Income">Income</option>
-                        </select>
-                    </td>
-                    <td>
-                        <span class="input-group-btn" ng-hide="showEditForm">
-                            <input class="btn btn-default" type="submit" value="Add" />
-                        </span>
-                        <span class="input-group-btn" ng-show="showEditForm">
-                            <input class="btn btn-default" type="submit" value="Edit" />
-                            <input class="btn btn-default" type="button" value="Cancel" ng-click="closeEditTransaction()" />
-                        </span>
-                    </td>
-                </tr>
-            </table>
-        </form>
+        <!-- Statistics view -->
+        <div class="container mclist-container" ng-controller="StatisticsController" ng-show="visibleView == 'Statistics'">
+
+        </div>
+
+        <!-- Recurrences view -->
+        <div class="container mclist-container" ng-controller="RecurrencesController" ng-show="visibleView == 'Recurrences'">
+
+        </div>
+
+        <!-- Categories view -->
+        <div class="container mclist-container" ng-controller="CategoriesController" ng-show="visibleView == 'Categories'">
+
+        </div>
 
     </div>
+
+
 
 </body>
 </html>

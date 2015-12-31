@@ -1,4 +1,8 @@
 ﻿var app = angular.module('MoneyCounterApp', []);
+app.controller('AppController', function ($scope) {
+    $scope.visibleView = 'Transactions';
+});
+
 app.controller('TransactionsController', function ($scope, $http, jsonPointerParseService, TransactionsService, CategoriesService) {
     var url = 'http://localhost:52709/api/Transactions';
     
