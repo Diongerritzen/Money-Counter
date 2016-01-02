@@ -15,14 +15,15 @@ app.controller('TransactionsController', function ($scope, $http, jsonPointerPar
     
     // default values for add/edit transaction form
     $scope.transactionDateInput = new Date();
-    $scope.transactionCategoryInput = '2';
-    $scope.transactionTypeInput = 'Expense';
+    $scope.transactionCategoryInput = '1';
+    $scope.transactionTypeInput = 'expense';
+
     $scope.transactionOrdering = 'Date';
     $scope.showEditForm = false;
     $scope.editableTransaction = {};
 
     $scope.setDefaultCategory = function () {
-        $scope.transactionCategoryInput = $scope.transactionTypeInput == 'Expense' ? ('' + $scope.categoryExpenseList[0].Id) : ('' + $scope.categoryIncomeList[0].Id);
+        $scope.transactionCategoryInput = $scope.transactionTypeInput == 'expense' ? ('' + $scope.categoryExpenseList[0].Id) : ('' + $scope.categoryIncomeList[0].Id);
     }
 
     $scope.addTransaction = function () {
@@ -69,7 +70,7 @@ app.controller('TransactionsController', function ($scope, $http, jsonPointerPar
         $scope.setDefaultCategory();
         $scope.transactionDescriptionInput = '';
         $scope.transactionAmountInput = '';
-        $scope.transactionTypeInput = 'Expense';
+        $scope.transactionTypeInput = 'expense';
         
         $scope.editableTransaction = {};
         $scope.showEditForm = false;
@@ -126,14 +127,14 @@ app.controller('TransactionsController', function ($scope, $http, jsonPointerPar
     }
     
     function getCategoryLists() {
-        CategoriesService.getListByType('Expense')
+        CategoriesService.getListByType('expense')
             .success(function (data) {
                 $scope.categoryExpenseList = jsonPointerParseService.pointerParse(data, 5);
             })
             .error(function (data) {
                 console.log(data);
             });
-        CategoriesService.getListByType('Income')
+        CategoriesService.getListByType('income')
             .success(function (data) {
                 $scope.categoryIncomeList = jsonPointerParseService.pointerParse(data, 5);
             })

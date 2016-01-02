@@ -16,6 +16,8 @@ namespace MoneyCounter.Models
     {
         public Category()
         {
+            this.Color = "black";
+            this.Default = false;
             this.Transactions = new HashSet<Transaction>();
             this.Recurrences = new HashSet<Recurrence>();
         }
@@ -23,6 +25,8 @@ namespace MoneyCounter.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string TransactionType { get; set; }
+        public string Color { get; set; }
+        public bool Default { get; set; }
     
         public virtual ICollection<Transaction> Transactions { get; set; }
         public virtual ICollection<Recurrence> Recurrences { get; set; }

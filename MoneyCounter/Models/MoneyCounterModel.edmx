@@ -50,6 +50,8 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar(max)" Nullable="true" />
     <Property Name="TransactionType" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Color" Type="nvarchar(max)" Nullable="true" DefaultValue="black" />
+    <Property Name="Default" Type="bit" Nullable="false" DefaultValue="false" />
     <Property Name="User_Id" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Users">
@@ -187,6 +189,8 @@
           <NavigationProperty Name="Transactions" Relationship="MoneyCounterModel.CategoryTransaction" FromRole="Category" ToRole="Transaction" />
           <NavigationProperty Name="Recurrences" Relationship="MoneyCounterModel.CategoryRecurrence" FromRole="Category" ToRole="Recurrence" />
           <NavigationProperty Name="User" Relationship="MoneyCounterModel.UserCategory" FromRole="Category" ToRole="User" />
+          <Property Name="Color" Type="String" Nullable="true" DefaultValue="black" />
+          <Property Name="Default" Type="Boolean" Nullable="false" DefaultValue="false" />
         </EntityType>
         <Association Name="CategoryTransaction">
           <End Type="MoneyCounterModel.Category" Role="Category" Multiplicity="1" >
@@ -258,6 +262,8 @@
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="TransactionType" ColumnName="TransactionType" />
+          <ScalarProperty Name="Color" ColumnName="Color" />
+          <ScalarProperty Name="Default" ColumnName="Default" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

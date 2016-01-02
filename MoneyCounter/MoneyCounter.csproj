@@ -87,6 +87,7 @@
     </Content>
     <Content Include="Global.asax" />
     <Content Include="index.html" />
+    <Content Include="Models\MoneyCounterModel.edmx.sql" />
     <Content Include="moneycounter.css" />
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Models\MoneyCounterModel.Context.tt">

@@ -1,28 +1,50 @@
-﻿body {
+﻿/* color scheme */
+.background-light {
+    background-color: #F0EFED;
 }
+.background-dark {
+    background-color: #990000;
+}
+.background-highlight {
+    background-color: #FF3300;
+}
+.text-light {
+    color: #F0EFED;
+}
+.text-dark {
+    color: #343434;
+}
+.text-expense {
+    color: red;
+}
+.text-income {
+    color: green;
+}
+/* end color scheme */
 
 .mcapp-container {
     min-width: 600px;
-    width: 50%;
+    width: 60%;
+    height: 100vh;
+}
+
+.mcapp-navigation {
+    margin-bottom: 0px;
 }
 
 .mclist-container {
     width: 100%;
-    /*max-height: 400px;*/
-    margin-top:15px;
-    padding-top:15px;
-    background-color:#990000;
+    padding: 15px;
 }
+.mclist-input {
 
+}
 .mclist-table {
-    background-color: white;
     width: 100%;
+    margin-bottom: 0px;
 }
-
-.scrollable {
-    width: 100%;
-    height: 400px;
-    overflow-y: auto;
+.mclist-input .mclist-table tbody tr td {
+    border-top: none;
 }
 
 .mclist-table-date {
@@ -39,41 +61,50 @@
     width: 80px;
     text-align: right;
 }
-.mclist-table-edit {
-    width: 1px;
-}
-.mclist-table-delete {
-    width: 1px;
+.mclist-table-buttons {
+    width: 89px;
 }
 
 .mclastitem-false:after {
     content: ', ';
 }
 
+.btn-add {
+    background-image: url(res/add-icon.png);
+}
+.btn-confirm {
+
+}
+.btn-cancel {
+
+}
 .btn-edit {
     background-image: url(res/edit-icon.png);
-    border: 0;
-    width: 32px;
-    height: 32px;
 }
 .btn-delete {
     background-image: url(res/delete-icon.png);
-    border: 0;
+}
+.btn-delete:hover {
+    background-color: red;
+}
+.btn-add, .btn-confirm, .btn-cancel {
     width: 32px;
     height: 32px;
 }
-
-.Expense {
-    color: red;
+.btn-edit, .btn-delete {
+    width: 24px;
+    height: 24px;
 }
-.Expense:before {
+.btn-add, .btn-confirm, .btn-cancel, .btn-edit, .btn-delete {
+    border: none;
+    background-size: cover;
+    background-color: rgba(255, 255, 255, 0);
+}
+
+.text-expense:before {
     content: '€-';
 }
 
-.Income {
-    color: green;
-}
-
-.Income:before {
+.text-income:before {
     content: '€';
 }
