@@ -1,17 +1,41 @@
 ﻿var app = angular.module('MoneyCounterApp', []);
-app.controller('AppController', function ($scope) {
+app.controller('AppController', function ($rootScope, $scope, jsonPointerParseService, TransactionsService, CategoriesService) {
+    $rootScope.transactionList = {};
+    $rootScope.categoryList = {};
     $scope.visibleView = 'Transactions';
+
+    $rootScope.refreshTransactionList = function () {
+        TransactionsService.getList()
+            .success(function (data) {
+                $rootScope.transactionList = jsonPointerParseService.pointerParse(data, 5);
+
+                angular.forEach($rootScope.transactionList, function (transaction, index) {
+                    $rootScope.transactionList[index].Date = moment(transaction.Date).format('L');
+                });
+            })
+            .error(function () {
+                alert('error from init');
+            });
+    };
+
+    $rootScope.refreshCategoryList = function () {
+        CategoriesService.getList()
+            .success(function (data) {
+                $rootScope.categoryList = jsonPointerParseService.pointerParse(data, 5);
+            })
+            .error(function (data) {
+                console.log(data);
+            });
+    };
+
+    
 });
 
-app.controller('TransactionsController', function ($scope, $http, jsonPointerParseService, TransactionsService, CategoriesService) {
+app.controller('TransactionsController', function ($rootScope, $scope, $http) {
     var url = 'http://localhost:52709/api/Transactions';
     
-    $scope.transactionList = {};
-    $scope.categoryExpenseList = {};
-    $scope.categoryIncomeList = {};
-    
-    getTransactionList();
-    getCategoryLists();
+    $rootScope.refreshTransactionList();
+    $rootScope.refreshCategoryList();
     
     // default values for add/edit transaction form
     $scope.transactionDateInput = new Date();
@@ -23,7 +47,7 @@ app.controller('TransactionsController', function ($scope, $http, jsonPointerPar
     $scope.editableTransaction = {};
 
     $scope.setDefaultCategory = function () {
-        $scope.transactionCategoryInput = $scope.transactionTypeInput == 'expense' ? ('' + $scope.categoryExpenseList[0].Id) : ('' + $scope.categoryIncomeList[0].Id);
+        $scope.transactionCategoryInput = $scope.transactionTypeInput == 'expense' ? ('' + $rootScope.categoryList[0].Id) : ('' + $rootScope.categoryList[1].Id);
     }
 
     $scope.addTransaction = function () {
@@ -40,14 +64,12 @@ app.controller('TransactionsController', function ($scope, $http, jsonPointerPar
 
         $http.post(url, newTransaction)
             .success(function () {
-                getTransactionList();
+                $rootScope.refreshTransactionList();
             })
             .error(function () {
                 alert("failure in addTransaction");
             });
     
-        $scope.transactionDateInput = new Date();
-        $scope.setDefaultCategory();
         $scope.transactionDescriptionInput = '';
         $scope.transactionAmountInput = '';
     }
@@ -92,7 +114,7 @@ app.controller('TransactionsController', function ($scope, $http, jsonPointerPar
 
         $http.put(url + '/' + editedTransaction.Id, editedTransaction)
             .success(function () {
-                getTransactionList();
+                $rootScope.refreshTransactionList();
             })
             .error(function () {
                 alert('failure in editTransaction');
@@ -105,41 +127,10 @@ app.controller('TransactionsController', function ($scope, $http, jsonPointerPar
     $scope.deleteTransaction = function (id) {
         $http.delete(url + '/' + id)
             .success(function () {
-                getTransactionList();
+                $rootScope.refreshTransactionList();
             })
             .error(function () {
                 alert('failure in deleteTask');
-            });
-    }
-    
-    function getTransactionList() {
-        TransactionsService.getList()
-            .success(function (data) {
-                $scope.transactionList = jsonPointerParseService.pointerParse(data, 5);
-    
-                angular.forEach($scope.transactionList, function (transaction, index) {
-                    $scope.transactionList[index].Date = moment(transaction.Date).format('L');
-                });
-            })
-            .error(function () {
-                alert('error from init');
-            });
-    }
-    
-    function getCategoryLists() {
-        CategoriesService.getListByType('expense')
-            .success(function (data) {
-                $scope.categoryExpenseList = jsonPointerParseService.pointerParse(data, 5);
-            })
-            .error(function (data) {
-                console.log(data);
-            });
-        CategoriesService.getListByType('income')
-            .success(function (data) {
-                $scope.categoryIncomeList = jsonPointerParseService.pointerParse(data, 5);
-            })
-            .error(function (data) {
-                console.log(data);
             });
     }
 });
@@ -152,8 +143,39 @@ app.controller('RecurrencesController', function ($scope, $http) {
 
 });
 
-app.controller('CategoriesController', function ($scope, $http) {
+app.controller('CategoriesController', function ($rootScope, $scope, $http) {
+    var url = 'http://localhost:52709/api/Categories';
 
+    $rootScope.refreshCategoryList();
+    
+    // default values for add/edit category form
+    $scope.categoryTypeInput = 'expense';
+    $scope.categoryColorInput = '#000';
+
+    $scope.showEditForm = false;
+
+    $scope.addCategory = function () {
+        var newCategory = {
+            Name: $scope.categoryNameInput,
+            TransactionType: $scope.categoryTypeInput,
+            Color: $scope.categoryColorInput,
+            User: { Id: 1 }
+        };
+
+        $http.post(url, newCategory)
+            .success(function () {
+                $rootScope.refreshCategoryList();
+            })
+            .error(function () {
+                alert("failure in addCategory");
+            });
+
+        $scope.categoryNameInput = '';
+    }
+    
+    $scope.editCategory = function () {
+        
+    }
 });
 
 app.factory('TransactionsService', function ($http) {

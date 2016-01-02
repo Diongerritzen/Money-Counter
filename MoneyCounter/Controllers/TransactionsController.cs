@@ -55,7 +55,7 @@ namespace MoneyCounter.Controllers
                 .Include("Category")
                 .Include("User")
                 .FirstOrDefault();
-            Transaction newTransaction = ResolveTransactionObjects(transaction);
+            Transaction newTransaction = ResolveTransactionRelations(transaction);
 
             db.Transactions.Remove(oldTransaction);
             db.Transactions.Add(transaction);
@@ -90,7 +90,7 @@ namespace MoneyCounter.Controllers
                 return BadRequest(ModelState);
             }
 
-            Transaction newTransaction = ResolveTransactionObjects(transaction);
+            Transaction newTransaction = ResolveTransactionRelations(transaction);
 
             db.Transactions.Add(newTransaction);
             db.SaveChanges();
@@ -133,10 +133,10 @@ namespace MoneyCounter.Controllers
             return db.Transactions.Count(e => e.Id == id) > 0;
         }
 
-        private Transaction ResolveTransactionObjects (Transaction transaction)
+        private Transaction ResolveTransactionRelations (Transaction transaction)
         {
-            transaction.User = db.Users.Where(u => u.Id == transaction.User.Id).FirstOrDefault();
             transaction.Category = db.Categories.Where(c => c.Id == transaction.Category.Id).FirstOrDefault();
+            transaction.User = db.Users.Where(u => u.Id == transaction.User.Id).FirstOrDefault();
 
             return transaction;
         }

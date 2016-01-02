@@ -24,7 +24,7 @@
 
 .mcapp-container {
     min-width: 600px;
-    width: 60%;
+    width: 50%;
     height: 100vh;
 }
 
@@ -36,15 +36,12 @@
     width: 100%;
     padding: 15px;
 }
-.mclist-input {
-
+.mclist-input .mclist-table tbody tr td {
+    border-top: none;
 }
 .mclist-table {
     width: 100%;
     margin-bottom: 0px;
-}
-.mclist-input .mclist-table tbody tr td {
-    border-top: none;
 }
 
 .mclist-table-date {
@@ -63,6 +60,9 @@
 }
 .mclist-table-buttons {
     width: 89px;
+}
+.mclist-table-categoryname {
+    width: auto;
 }
 
 .mclastitem-false:after {

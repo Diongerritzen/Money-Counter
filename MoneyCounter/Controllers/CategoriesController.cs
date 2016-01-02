@@ -85,10 +85,12 @@ namespace MoneyCounter.Controllers
                 return BadRequest(ModelState);
             }
 
-            db.Categories.Add(category);
+            Category newCategory = ResolveCategoryRelations(category);
+
+            db.Categories.Add(newCategory);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = category.Id }, category);
+            return CreatedAtRoute("DefaultApi", new { id = newCategory.Id }, newCategory);
         }
 
         // DELETE: api/Categories/5
@@ -119,6 +121,15 @@ namespace MoneyCounter.Controllers
         private bool CategoryExists(int id)
         {
             return db.Categories.Count(e => e.Id == id) > 0;
+        }
+
+        private Category ResolveCategoryRelations(Category category)
+        {
+            category.Transactions = db.Transactions.Where(t => t.Category.Id == category.Id).ToList();
+            category.Recurrences = db.Recurrences.Where(r => r.Category.Id == category.Id).ToList();
+            category.User = db.Users.Where(u => u.Id == category.User.Id).FirstOrDefault();
+
+            return category;
         }
     }
 }

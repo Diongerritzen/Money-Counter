@@ -20,22 +20,28 @@
             <div class="container-fluid">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
+                        <span class="glyphicon glyphicon-menu-hamburger"></span>
                     </button>
                     <span class="navbar-brand">Money Counter</span>
                 </div>
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
-                        <li ng-class="visibleView == 'Transactions' ? 'active' : ''"><a href="" ng-click="visibleView = 'Transactions'">Transactions</a></li>
-                        <li ng-class="visibleView == 'Statistics' ? 'active' : ''"><a href="" ng-click="visibleView = 'Statistics'">Statistics</a></li>
-                        <li ng-class="visibleView == 'Recurrences' ? 'active' : ''"><a href="" ng-click="visibleView = 'Recurrences'">Recurrences</a></li>
-                        <li ng-class="visibleView == 'Categories' ? 'active' : ''"><a href="" ng-click="visibleView = 'Categories'">Categories</a></li>
+                        <li ng-class="visibleView == 'Transactions' ? 'active' : ''">
+                            <a href="" ng-click="visibleView = 'Transactions'"><span class="glyphicon glyphicon-list-alt"></span> Transactions</a>
+                        </li>
+                        <li ng-class="visibleView == 'Statistics' ? 'active' : ''">
+                            <a href="" ng-click="visibleView = 'Statistics'"><span class="glyphicon glyphicon-stats"></span> Statistics</a>
+                        </li>
+                        <li ng-class="visibleView == 'Recurrences' ? 'active' : ''">
+                            <a href="" ng-click="visibleView = 'Recurrences'"> <span class="glyphicon glyphicon-repeat"></span> Recurrences</a>
+                        </li>
+                        <li ng-class="visibleView == 'Categories' ? 'active' : ''">
+                            <a href="" ng-click="visibleView = 'Categories'"><span class="glyphicon glyphicon-tag"></span> Categories</a>
+                        </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="">Sign up</a></li>
-                        <li><a href="">Login</a></li>
+                        <li><a href=""><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                        <li><a href=""><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                     </ul>
                 </div>
             </div>
@@ -44,11 +50,14 @@
         <!-- Transaction view -->
         <div class="container mclist-container background-dark" ng-controller="TransactionsController" ng-show="visibleView == 'Transactions'">
 
-            <form class="form-inline mclist-input" ng-class="showEditForm ? 'background-highlight' : 'background-light'" ng-submit="showEditForm ? editTransaction() : addTransaction()">
+            <form class="form-inline mclist-input" 
+                  ng-class="showEditForm ? 'background-highlight' : 'background-light'"
+                  ng-submit="showEditForm ? editTransaction() : addTransaction()">
+
                 <input class="form-control" type="date" ng-model="transactionDateInput" required />
 
                 <select class="form-control" ng-model="transactionCategoryInput">
-                    <option value="{{c.Id}}" ng-repeat="c in transactionTypeInput == 'expense' ? categoryExpenseList : categoryIncomeList">{{c.Name}}</option>
+                    <option value="{{c.Id}}" ng-repeat="c in categoryList | filter: { TransactionType: transactionTypeInput }">{{c.Name}}</option>
                 </select>
                 
                 <input class="form-control" type="text" placeholder="Description" ng-model="transactionDescriptionInput" />
@@ -71,6 +80,7 @@
                         <span class="glyphicon glyphicon-remove"></span>
                     </button>
                 </div>
+
             </form>
 
             <table class="table table-condensed mclist-table background-light">
@@ -117,7 +127,67 @@
 
         <!-- Categories view -->
         <div class="container mclist-container background-dark" ng-controller="CategoriesController" ng-show="visibleView == 'Categories'">
+            <form class="form-inline mclist-input"
+                  ng-class="showEditForm ? 'background-highlight' : 'background-light'"
+                  ng-submit="showEditForm ? editCategory() : addCategory()">
 
+                <input class="form-control" type="text" placeholder="Name" ng-model="categoryNameInput" />
+
+                <select class="form-control" ng-model="categoryTypeInput">
+                    <option value="expense">Expense</option>
+                    <option value="income">Income</option>
+                </select>
+
+                <input class="form-control" type="color" ng-model="categoryColorInput" />
+
+                <button type="submit" class="btn btn-default" ng-hide="showEditForm">
+                    <span class="glyphicon glyphicon-plus"></span>
+                </button>
+
+            </form>
+
+            <table class="table table-condensed mclist-table background-light">
+                <thead>
+                    <tr>
+                        <th class="mclist-table-categoryname">Name</th>
+                        <th class="mclist-table-buttons"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="2" class="text-expense">Expense:</td>
+                    </tr>
+                    <tr ng-repeat="c in categoryList | filter: { TransactionType : 'expense' }">
+                        <td class="mclist-table-categoryname" style="color: {{c.Color}}">{{c.Name}}</td>
+                        <td class="mclist-table-buttons">
+                            <span class="btn-group">
+                                <button type="button" class="btn btn-default" ng-click="showEditCategory(c)">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" ng-click="deleteCategory(c.Id)">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="text-income">Income:</td>
+                    </tr>
+                    <tr ng-repeat="c in categoryList | filter: { TransactionType : 'income' }">
+                        <td class="mclist-table-categoryname" style="color: {{c.Color}}">{{c.Name}}</td>
+                        <td class="mclist-table-buttons">
+                            <span class="btn-group">
+                                <button type="button" class="btn btn-default" ng-click="showEditCategory(c)">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                </button>
+                                <button type="button" class="btn btn-default" ng-click="deleteCategory(c.Id)">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
     </div>
