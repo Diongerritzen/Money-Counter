@@ -8,11 +8,6 @@ app.controller('AppController', function ($rootScope, $scope, jsonPointerParseSe
         TransactionsService.getList()
             .success(function (data) {
                 $rootScope.transactionList = jsonPointerParseService.pointerParse(data, 5);
-
-                angular.forEach($rootScope.transactionList, function (transaction, index) {
-                    var date = new Date(transaction.Date);
-                    $rootScope.transactionList[index].Date = date.toLocaleDateString();
-                });
             })
             .error(function () {
                 alert('error from init');
@@ -27,6 +22,10 @@ app.controller('AppController', function ($rootScope, $scope, jsonPointerParseSe
             .error(function (data) {
                 console.log(data);
             });
+    };
+
+    $rootScope.formatDate = function (date) {
+        return (new Date(date)).toLocaleDateString();
     };
 });
 

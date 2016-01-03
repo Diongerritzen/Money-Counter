@@ -92,7 +92,7 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="t in transactionList | orderBy: transactionOrdering">
-                        <td class="mclist-table-date">{{t.Date}}</td>
+                        <td class="mclist-table-date">{{formatDate(t.Date)}}</td>
                         <td class="mclist-table-category" style="color: {{t.Category.Color}}"><b>{{t.Category.Name}}</b></td>
                         <td class="mclist-table-desc">{{t.Description}}</td>
                         <td class="mclist-table-amount text-{{t.Type}}">{{t.Amount.toFixed(2)}}</td>
