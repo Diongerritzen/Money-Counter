@@ -40,7 +40,7 @@ app.controller('TransactionsController', function ($rootScope, $scope, $http) {
     $scope.transactionCategoryInput = '1';
     $scope.transactionTypeInput = 'expense';
 
-    $scope.transactionOrdering = 'Date';
+    $scope.transactionOrdering = '!Date';
     $scope.showEditForm = false;
     $scope.editableTransaction = {};
 
@@ -55,7 +55,7 @@ app.controller('TransactionsController', function ($rootScope, $scope, $http) {
             Date: utcdate,
             Category: { Id: $scope.transactionCategoryInput },
             Description: $scope.transactionDescriptionInput,
-            Amount: $scope.transactionAmountInput,
+            Amount: parseFloat($scope.transactionAmountInput),
             Type: $scope.transactionTypeInput,
             User: { Id: 1 }
         };

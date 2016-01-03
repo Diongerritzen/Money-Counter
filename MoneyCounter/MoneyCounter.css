@@ -16,9 +16,11 @@
 }
 .text-expense {
     color: red;
+    font-weight: bold;
 }
 .text-income {
     color: green;
+    font-weight: bold;
 }
 /* end color scheme */
 
@@ -36,6 +38,9 @@
     width: 100%;
     padding: 15px;
 }
+.mclist-input {
+    padding: 5px;
+}
 .mclist-input .mclist-table tbody tr td {
     border-top: none;
 }
@@ -43,12 +48,14 @@
     width: 100%;
     margin-bottom: 0px;
 }
-
+.mclist-table-header {
+    text-align: center;
+}
 .mclist-table-date {
     width: 1px;
 }
 .mclist-table-category {
-    width: 1px;
+    width: 100px;
     text-align: right;
 }
 .mclist-table-desc {
@@ -58,8 +65,11 @@
     width: 80px;
     text-align: right;
 }
-.mclist-table-buttons {
-    width: 89px;
+.mclist-table-buttons-sm {
+    width: 80px;
+}
+.mclist-table-buttons-xs {
+    width: 58px;
 }
 .mclist-table-categoryname {
     width: auto;

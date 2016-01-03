@@ -53,29 +53,29 @@
             <form class="form-inline mclist-input" 
                   ng-class="showEditForm ? 'background-highlight' : 'background-light'"
                   ng-submit="showEditForm ? editTransaction() : addTransaction()">
-                <input class="form-control" type="date" ng-model="transactionDateInput" required />
+                <input class="form-control input-sm" type="date" ng-model="transactionDateInput" required />
 
-                <select class="form-control" ng-model="transactionCategoryInput">
+                <select class="form-control input-sm" ng-model="transactionCategoryInput">
                     <option value="{{c.Id}}" ng-repeat="c in categoryList | filter: { TransactionType: transactionTypeInput }">{{c.Name}}</option>
                 </select>
                 
-                <input class="form-control" type="text" placeholder="Description" ng-model="transactionDescriptionInput" />
+                <input class="form-control input-sm" type="text" placeholder="Description" ng-model="transactionDescriptionInput" />
 
-                <input class="form-control" type="number" step="0.01" min="0.00" placeholder="0.00" ng-model="transactionAmountInput" required />
+                <input class="form-control input-sm" type="number" step="0.01" min="0.00" placeholder="0.00" ng-model="transactionAmountInput" required />
                 
-                <select class="form-control" ng-model="transactionTypeInput" ng-change="setDefaultCategory()">
+                <select class="form-control input-sm" ng-model="transactionTypeInput" ng-change="setDefaultCategory()">
                     <option value="expense">Expense</option>
                     <option value="income">Income</option>
                 </select>
 
-                <button type="submit" class="btn btn-default" ng-hide="showEditForm">
+                <button type="submit" class="btn btn-default btn-sm" ng-hide="showEditForm">
                     <span class="glyphicon glyphicon-plus"></span>
                 </button>
                 <div class="form-group" ng-show="showEditForm">
-                    <button type="submit" class="btn btn-default">
+                    <button type="submit" class="btn btn-default btn-sm">
                         <span class="glyphicon glyphicon-ok"></span>
                     </button>
-                    <button type="button" class="btn btn-default" ng-click="closeEditTransaction()">
+                    <button type="button" class="btn btn-default btn-sm" ng-click="closeEditTransaction()">
                         <span class="glyphicon glyphicon-remove"></span>
                     </button>
                 </div>
@@ -84,25 +84,25 @@
             <table class="table table-condensed mclist-table background-light">
                 <thead>
                     <tr>
-                        <th class="mclist-table-date" ng-click="transactionOrdering = 'Date'">Date</th>
-                        <th class="mclist-table-category" ng-click="transactionOrdering = 'Category.Name'">Category</th>
-                        <th class="mclist-table-desc" ng-click="transactionOrdering = 'Description'">Description</th>
-                        <th class="mclist-table-amount" ng-click="transactionOrdering = 'Type === \'income\' ? Amount : -Amount'">Amount</th>
-                        <th class="mclist-table-buttons"></th>
+                        <th class="mclist-table-header" ng-click="transactionOrdering = '!Date'">Date</th>
+                        <th class="mclist-table-header" ng-click="transactionOrdering = 'Category.Name'">Category</th>
+                        <th class="mclist-table-header" ng-click="transactionOrdering = 'Description'">Description</th>
+                        <th class="mclist-table-header" ng-click="transactionOrdering = 'Type === \'income\' ? Amount : -Amount'">Amount</th>
+                        <th class="mclist-table-header"></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="t in transactionList | orderBy: transactionOrdering">
                         <td class="mclist-table-date">{{t.Date}}</td>
-                        <td class="mclist-table-category" style="color: {{t.Category.Color}}">{{t.Category.Name}}</td>
+                        <td class="mclist-table-category" style="color: {{t.Category.Color}}"><b>{{t.Category.Name}}</b></td>
                         <td class="mclist-table-desc">{{t.Description}}</td>
                         <td class="mclist-table-amount text-{{t.Type}}">{{t.Amount.toFixed(2)}}</td>
-                        <td class="mclist-table-buttons">
+                        <td class="mclist-table-buttons-sm">
                             <span class="btn-group">
-                                <button type="button" class="btn btn-default" ng-click="showEditTransaction(t)">
+                                <button type="button" class="btn btn-default btn-sm" ng-click="showEditTransaction(t)">
                                     <span class="glyphicon glyphicon-pencil"></span>
                                 </button>
-                                <button type="button" class="btn btn-default" ng-click="deleteTransaction(t.Id)">
+                                <button type="button" class="btn btn-default btn-sm" ng-click="deleteTransaction(t.Id)">
                                     <span class="glyphicon glyphicon-trash"></span>
                                 </button>
                             </span>
@@ -130,59 +130,42 @@
                   ng-class="showEditForm ? 'background-highlight' : 'background-light'"
                   ng-submit="showEditForm ? editCategory() : addCategory()">
 
-                <input class="form-control" type="text" placeholder="Name" ng-model="categoryNameInput" />
+                <input class="form-control input-sm" type="text" placeholder="Name" ng-model="categoryNameInput" />
 
-                <select class="form-control" ng-model="categoryTypeInput">
+                <select class="form-control input-sm" ng-model="categoryTypeInput">
                     <option value="expense">Expense</option>
                     <option value="income">Income</option>
                 </select>
 
-                <input class="form-control" type="color" ng-model="categoryColorInput" />
+                <input class="form-control input-sm" type="color" style="width: 100px" ng-model="categoryColorInput" />
 
-                <button type="submit" class="btn btn-default" ng-hide="showEditForm">
+                <button type="submit" class="btn btn-default btn-sm" ng-hide="showEditForm">
                     <span class="glyphicon glyphicon-plus"></span>
                 </button>
                 <div class="form-group" ng-show="showEditForm">
-                    <button type="submit" class="btn btn-default">
+                    <button type="submit" class="btn btn-default btn-sm">
                         <span class="glyphicon glyphicon-ok"></span>
                     </button>
-                    <button type="button" class="btn btn-default" ng-click="closeEditCategory()">
+                    <button type="button" class="btn btn-default btn-sm" ng-click="closeEditCategory()">
                         <span class="glyphicon glyphicon-remove"></span>
                     </button>
                 </div>
             </form>
 
-            <table class="table table-condensed mclist-table background-light">
+            <table class="table table-condensed mclist-table background-light" 
+                   ng-repeat="t in [{ Type: 'expense', Name: 'Expense' }, { Type: 'income', Name: 'Income' }]">
                 <thead>
                     <tr>
-                        <th class="mclist-table-categoryname">Name</th>
-                        <th class="mclist-table-buttons"></th>
+                        <th class="mclist-table-header" colspan="2">
+                            <span ng-class="(t.Type === 'expense') ? 'glyphicon glyphicon-arrow-down' : 'glyphicon glyphicon-arrow-up'"></span> {{t.Name}}
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td colspan="2" class="text-expense">Expense:</td>
-                    </tr>
-                    <tr ng-repeat="c in categoryList | filter: { TransactionType : 'expense' }">
-                        <td class="mclist-table-categoryname" style="color: {{c.Color}}">{{c.Name}}</td>
-                        <td class="mclist-table-buttons">
-                            <span class="btn-group">
-                                <button type="button" class="btn btn-default btn-xs" ng-click="showEditCategory(c)">
-                                    <span class="glyphicon glyphicon-pencil"></span>
-                                </button>
-                                <button type="button" class="btn btn-default btn-xs" ng-click="deleteCategory(c.Id)">
-                                    <span class="glyphicon glyphicon-trash"></span>
-                                </button>
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" class="text-income">Income:</td>
-                    </tr>
-                    <tr ng-repeat="c in categoryList | filter: { TransactionType : 'income' }">
-                        <td class="mclist-table-categoryname" style="color: {{c.Color}}">{{c.Name}}</td>
-                        <td class="mclist-table-buttons">
-                            <span class="btn-group">
+                    <tr ng-repeat="c in categoryList | filter: { TransactionType : t.Type }">
+                        <td class="mclist-table-categoryname" style="color: {{c.Color}}"><b>{{c.Name}}</b></td>
+                        <td class="mclist-table-buttons-xs">
+                            <span class="btn-group" ng-hide="c.Default">
                                 <button type="button" class="btn btn-default btn-xs" ng-click="showEditCategory(c)">
                                     <span class="glyphicon glyphicon-pencil"></span>
                                 </button>
