@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="moneycounter.css" type="text/css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-    <script src="Scripts/moment.js"></script>
     <script src="Scripts/moneycounter.js"></script>
     <style>
 
@@ -84,7 +83,7 @@
             <table class="table table-condensed mclist-table background-light">
                 <thead>
                     <tr>
-                        <th class="mclist-table-header" ng-click="transactionOrdering = '!Date'">Date</th>
+                        <th class="mclist-table-header" ng-click="transactionOrdering = '-Date'">Date</th>
                         <th class="mclist-table-header" ng-click="transactionOrdering = 'Category.Name'">Category</th>
                         <th class="mclist-table-header" ng-click="transactionOrdering = 'Description'">Description</th>
                         <th class="mclist-table-header" ng-click="transactionOrdering = 'Type === \'income\' ? Amount : -Amount'">Amount</th>
@@ -114,8 +113,10 @@
         </div>
 
         <!-- Statistics view -->
-        <div class="container mclist-container background-dark" ng-controller="StatisticsController" ng-show="visibleView === 'Statistics'">
-
+        <div class="container mcstats-container background-dark" ng-controller="StatisticsController" ng-show="visibleView === 'Statistics'">
+            <div class="mcstats-summary">
+            
+            </div>
         </div>
 
         <!-- Recurrences view -->

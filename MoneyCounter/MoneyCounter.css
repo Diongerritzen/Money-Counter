@@ -29,12 +29,11 @@
     width: 50%;
     height: 100vh;
 }
-
 .mcapp-navigation {
     margin-bottom: 0px;
 }
 
-.mclist-container {
+.mclist-container, .mcstats-container {
     width: 100%;
     padding: 15px;
 }
@@ -73,6 +72,13 @@
 }
 .mclist-table-categoryname {
     width: auto;
+}
+
+.mcstats-summary {
+
+}
+.mcstats-graph {
+
 }
 
 .text-expense:before {

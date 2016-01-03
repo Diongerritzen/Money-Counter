@@ -104,10 +104,6 @@
     <Content Include="Scripts\moneycounter.js" />
     <Content Include="Scripts\angular.min.js.map" />
     <None Include="Scripts\_references.js" />
-    <Content Include="Scripts\moment-with-locales.js" />
-    <Content Include="Scripts\moment-with-locales.min.js" />
-    <Content Include="Scripts\moment.js" />
-    <Content Include="Scripts\moment.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

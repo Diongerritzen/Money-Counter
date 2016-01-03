@@ -10,7 +10,8 @@ app.controller('AppController', function ($rootScope, $scope, jsonPointerParseSe
                 $rootScope.transactionList = jsonPointerParseService.pointerParse(data, 5);
 
                 angular.forEach($rootScope.transactionList, function (transaction, index) {
-                    $rootScope.transactionList[index].Date = moment(transaction.Date).format('L');
+                    var date = new Date(transaction.Date);
+                    $rootScope.transactionList[index].Date = date.toLocaleDateString();
                 });
             })
             .error(function () {
@@ -40,13 +41,13 @@ app.controller('TransactionsController', function ($rootScope, $scope, $http) {
     $scope.transactionCategoryInput = '1';
     $scope.transactionTypeInput = 'expense';
 
-    $scope.transactionOrdering = '!Date';
+    $scope.transactionOrdering = '-Date';
     $scope.showEditForm = false;
     $scope.editableTransaction = {};
 
     $scope.setDefaultCategory = function () {
         $scope.transactionCategoryInput = $scope.transactionTypeInput === 'expense' ? ('' + $rootScope.categoryList[0].Id) : ('' + $rootScope.categoryList[1].Id);
-    }
+    };
 
     $scope.addTransaction = function () {
         var date = $scope.transactionDateInput;
@@ -67,13 +68,12 @@ app.controller('TransactionsController', function ($rootScope, $scope, $http) {
             .error(function () {
                 alert("failure in addTransaction");
             });
-    
+
         $scope.transactionDescriptionInput = '';
         $scope.transactionAmountInput = '';
-    }
+    };
     
-    $scope.showEditTransaction = function (transaction)
-    {
+    $scope.showEditTransaction = function (transaction) {
         $scope.transactionDateInput = new Date(transaction.Date);
         $scope.transactionCategoryInput = transaction.Category.Id + '';
         $scope.transactionDescriptionInput = transaction.Description;
@@ -82,22 +82,20 @@ app.controller('TransactionsController', function ($rootScope, $scope, $http) {
 
         $scope.editableTransaction = transaction;
         $scope.showEditForm = true;
-    }
+    };
 
-    $scope.closeEditTransaction = function ()
-    {
+    $scope.closeEditTransaction = function () {
         $scope.transactionDateInput = new Date();
         $scope.transactionDescriptionInput = '';
         $scope.transactionAmountInput = '';
         $scope.transactionTypeInput = 'expense';
         $scope.setDefaultCategory();
-        
+
         $scope.editableTransaction = {};
         $scope.showEditForm = false;
-    }
+    };
 
-    $scope.editTransaction = function ()
-    {
+    $scope.editTransaction = function () {
         var date = $scope.transactionDateInput;
         var utcdate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
         var editedTransaction = {
@@ -119,7 +117,7 @@ app.controller('TransactionsController', function ($rootScope, $scope, $http) {
             });
 
         $scope.closeEditTransaction();
-    }
+    };
 
     $scope.deleteTransaction = function (id) {
         $http.delete(url + '/' + id)
@@ -129,11 +127,11 @@ app.controller('TransactionsController', function ($rootScope, $scope, $http) {
             .error(function () {
                 alert('failure in deleteTask');
             });
-    }
+    };
 });
 
-app.controller('StatisticsController', function ($scope, $http) {
-
+app.controller('StatisticsController', function ($rootScope, $scope, $http, TransactionsService) {
+    
 });
 
 app.controller('RecurrencesController', function ($scope, $http) {
@@ -169,7 +167,7 @@ app.controller('CategoriesController', function ($rootScope, $scope, $http) {
             });
 
         $scope.categoryNameInput = '';
-    }
+    };
     
     $scope.showEditCategory = function (category) {
         $scope.categoryNameInput = category.Name;
@@ -178,7 +176,7 @@ app.controller('CategoriesController', function ($rootScope, $scope, $http) {
 
         $scope.editableCategory = category;
         $scope.showEditForm = true;
-    }
+    };
 
     $scope.closeEditCategory = function () {
         $scope.categoryNameInput = '';
@@ -187,7 +185,7 @@ app.controller('CategoriesController', function ($rootScope, $scope, $http) {
 
         $scope.editableCategory = {};
         $scope.showEditForm = false;
-    }
+    };
 
     $scope.editCategory = function () {
         var editedCategory = {
@@ -208,7 +206,7 @@ app.controller('CategoriesController', function ($rootScope, $scope, $http) {
             });
 
         $scope.closeEditCategory();
-    }
+    };
 
     $scope.deleteCategory = function (id) {
         $http.delete(url + '/' + id)
@@ -220,7 +218,7 @@ app.controller('CategoriesController', function ($rootScope, $scope, $http) {
                 alert('failure in deleteTask');
             });
 
-    }
+    };
 });
 
 app.factory('TransactionsService', function ($http) {
@@ -228,6 +226,9 @@ app.factory('TransactionsService', function ($http) {
     var service = {
         getList: function () {
             return $http.get(url);
+        },
+        getListByYearMonth: function (year, month) {
+            return $http.get(url, { params: { year: year, month: month } });
         }
     };
 

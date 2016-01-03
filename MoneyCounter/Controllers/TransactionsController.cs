@@ -22,6 +22,12 @@ namespace MoneyCounter.Controllers
             return db.Transactions;
         }
 
+        // GET: api/Transactions
+        public IQueryable<Transaction> GetTransactions(int year, int month)
+        {
+            return db.Transactions.Where(t => t.Date.Year == year && t.Date.Month == (month+1));
+        }
+
         // GET: api/Transactions/5
         [ResponseType(typeof(Transaction))]
         public IHttpActionResult GetTransaction(int id)
