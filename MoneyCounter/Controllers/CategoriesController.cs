@@ -55,6 +55,8 @@ namespace MoneyCounter.Controllers
                 return BadRequest();
             }
 
+            category = ResolveCategoryRelations(category);
+
             db.Entry(category).State = EntityState.Modified;
 
             try
@@ -101,6 +103,15 @@ namespace MoneyCounter.Controllers
             if (category == null)
             {
                 return NotFound();
+            }
+
+            Category defaultCategory = db.Categories.Where(c => c.TransactionType == category.TransactionType && c.Name == "Other").FirstOrDefault();
+            List<Transaction> affectedTransactions = db.Transactions.Where(t => t.Category.Id == category.Id).ToList();
+
+            foreach (var transaction in affectedTransactions)
+            {
+                transaction.Category = defaultCategory;
+                db.Entry(transaction).State = EntityState.Modified;
             }
 
             db.Categories.Remove(category);

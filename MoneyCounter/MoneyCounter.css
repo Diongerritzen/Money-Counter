@@ -65,42 +65,6 @@
     width: auto;
 }
 
-.mclastitem-false:after {
-    content: ', ';
-}
-
-.btn-add {
-    background-image: url(res/add-icon.png);
-}
-.btn-confirm {
-
-}
-.btn-cancel {
-
-}
-.btn-edit {
-    background-image: url(res/edit-icon.png);
-}
-.btn-delete {
-    background-image: url(res/delete-icon.png);
-}
-.btn-delete:hover {
-    background-color: red;
-}
-.btn-add, .btn-confirm, .btn-cancel {
-    width: 32px;
-    height: 32px;
-}
-.btn-edit, .btn-delete {
-    width: 24px;
-    height: 24px;
-}
-.btn-add, .btn-confirm, .btn-cancel, .btn-edit, .btn-delete {
-    border: none;
-    background-size: cover;
-    background-color: rgba(255, 255, 255, 0);
-}
-
 .text-expense:before {
     content: '€-';
 }

@@ -55,8 +55,8 @@ namespace MoneyCounter.Controllers
                 .Include("Category")
                 .Include("User")
                 .FirstOrDefault();
-            Transaction newTransaction = ResolveTransactionRelations(transaction);
-
+            transaction = ResolveTransactionRelations(transaction);
+            
             db.Transactions.Remove(oldTransaction);
             db.Transactions.Add(transaction);
 

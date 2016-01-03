@@ -27,8 +27,6 @@ app.controller('AppController', function ($rootScope, $scope, jsonPointerParseSe
                 console.log(data);
             });
     };
-
-    
 });
 
 app.controller('TransactionsController', function ($rootScope, $scope, $http) {
@@ -47,7 +45,7 @@ app.controller('TransactionsController', function ($rootScope, $scope, $http) {
     $scope.editableTransaction = {};
 
     $scope.setDefaultCategory = function () {
-        $scope.transactionCategoryInput = $scope.transactionTypeInput == 'expense' ? ('' + $rootScope.categoryList[0].Id) : ('' + $rootScope.categoryList[1].Id);
+        $scope.transactionCategoryInput = $scope.transactionTypeInput === 'expense' ? ('' + $rootScope.categoryList[0].Id) : ('' + $rootScope.categoryList[1].Id);
     }
 
     $scope.addTransaction = function () {
@@ -89,10 +87,10 @@ app.controller('TransactionsController', function ($rootScope, $scope, $http) {
     $scope.closeEditTransaction = function ()
     {
         $scope.transactionDateInput = new Date();
-        $scope.setDefaultCategory();
         $scope.transactionDescriptionInput = '';
         $scope.transactionAmountInput = '';
         $scope.transactionTypeInput = 'expense';
+        $scope.setDefaultCategory();
         
         $scope.editableTransaction = {};
         $scope.showEditForm = false;
@@ -119,7 +117,6 @@ app.controller('TransactionsController', function ($rootScope, $scope, $http) {
             .error(function () {
                 alert('failure in editTransaction');
             });
-
 
         $scope.closeEditTransaction();
     }
@@ -153,6 +150,7 @@ app.controller('CategoriesController', function ($rootScope, $scope, $http) {
     $scope.categoryColorInput = '#000';
 
     $scope.showEditForm = false;
+    $scope.editableCategory = {};
 
     $scope.addCategory = function () {
         var newCategory = {
@@ -173,8 +171,55 @@ app.controller('CategoriesController', function ($rootScope, $scope, $http) {
         $scope.categoryNameInput = '';
     }
     
+    $scope.showEditCategory = function (category) {
+        $scope.categoryNameInput = category.Name;
+        $scope.categoryTypeInput = category.TransactionType;
+        $scope.categoryColorInput = category.Color;
+
+        $scope.editableCategory = category;
+        $scope.showEditForm = true;
+    }
+
+    $scope.closeEditCategory = function () {
+        $scope.categoryNameInput = '';
+        $scope.categoryTypeInput = 'expense';
+        $scope.categoryColorInput = '#000';
+
+        $scope.editableCategory = {};
+        $scope.showEditForm = false;
+    }
+
     $scope.editCategory = function () {
-        
+        var editedCategory = {
+            Name: $scope.categoryNameInput,
+            TransactionType: $scope.categoryTypeInput,
+            Color: $scope.categoryColorInput,
+            User: { Id: $scope.editableCategory.User.Id },
+            Id: $scope.editableCategory.Id
+        };
+
+        $http.put(url + '/' + editedCategory.Id, editedCategory)
+            .success(function () {
+                $rootScope.refreshCategoryList();
+                $rootScope.refreshTransactionList();
+            })
+            .error(function () {
+                alert('failure in editTransaction');
+            });
+
+        $scope.closeEditCategory();
+    }
+
+    $scope.deleteCategory = function (id) {
+        $http.delete(url + '/' + id)
+            .success(function () {
+                $rootScope.refreshCategoryList();
+                $rootScope.refreshTransactionList();
+            })
+            .error(function () {
+                alert('failure in deleteTask');
+            });
+
     }
 });
 

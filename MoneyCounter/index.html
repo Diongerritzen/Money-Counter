@@ -26,16 +26,16 @@
                 </div>
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
-                        <li ng-class="visibleView == 'Transactions' ? 'active' : ''">
+                        <li ng-class="visibleView === 'Transactions' ? 'active' : ''">
                             <a href="" ng-click="visibleView = 'Transactions'"><span class="glyphicon glyphicon-list-alt"></span> Transactions</a>
                         </li>
-                        <li ng-class="visibleView == 'Statistics' ? 'active' : ''">
+                        <li ng-class="visibleView === 'Statistics' ? 'active' : ''">
                             <a href="" ng-click="visibleView = 'Statistics'"><span class="glyphicon glyphicon-stats"></span> Statistics</a>
                         </li>
-                        <li ng-class="visibleView == 'Recurrences' ? 'active' : ''">
+                        <li ng-class="visibleView === 'Recurrences' ? 'active' : ''">
                             <a href="" ng-click="visibleView = 'Recurrences'"> <span class="glyphicon glyphicon-repeat"></span> Recurrences</a>
                         </li>
-                        <li ng-class="visibleView == 'Categories' ? 'active' : ''">
+                        <li ng-class="visibleView === 'Categories' ? 'active' : ''">
                             <a href="" ng-click="visibleView = 'Categories'"><span class="glyphicon glyphicon-tag"></span> Categories</a>
                         </li>
                     </ul>
@@ -48,12 +48,11 @@
         </nav>
 
         <!-- Transaction view -->
-        <div class="container mclist-container background-dark" ng-controller="TransactionsController" ng-show="visibleView == 'Transactions'">
+        <div class="container mclist-container background-dark" ng-controller="TransactionsController" ng-show="visibleView === 'Transactions'">
 
             <form class="form-inline mclist-input" 
                   ng-class="showEditForm ? 'background-highlight' : 'background-light'"
                   ng-submit="showEditForm ? editTransaction() : addTransaction()">
-
                 <input class="form-control" type="date" ng-model="transactionDateInput" required />
 
                 <select class="form-control" ng-model="transactionCategoryInput">
@@ -80,7 +79,6 @@
                         <span class="glyphicon glyphicon-remove"></span>
                     </button>
                 </div>
-
             </form>
 
             <table class="table table-condensed mclist-table background-light">
@@ -89,7 +87,7 @@
                         <th class="mclist-table-date" ng-click="transactionOrdering = 'Date'">Date</th>
                         <th class="mclist-table-category" ng-click="transactionOrdering = 'Category.Name'">Category</th>
                         <th class="mclist-table-desc" ng-click="transactionOrdering = 'Description'">Description</th>
-                        <th class="mclist-table-amount" ng-click="transactionOrdering = 'Type == \'income\' ? Amount : -Amount'">Amount</th>
+                        <th class="mclist-table-amount" ng-click="transactionOrdering = 'Type === \'income\' ? Amount : -Amount'">Amount</th>
                         <th class="mclist-table-buttons"></th>
                     </tr>
                 </thead>
@@ -116,17 +114,18 @@
         </div>
 
         <!-- Statistics view -->
-        <div class="container mclist-container background-dark" ng-controller="StatisticsController" ng-show="visibleView == 'Statistics'">
+        <div class="container mclist-container background-dark" ng-controller="StatisticsController" ng-show="visibleView === 'Statistics'">
 
         </div>
 
         <!-- Recurrences view -->
-        <div class="container mclist-container background-dark" ng-controller="RecurrencesController" ng-show="visibleView == 'Recurrences'">
+        <div class="container mclist-container background-dark" ng-controller="RecurrencesController" ng-show="visibleView === 'Recurrences'">
 
         </div>
 
         <!-- Categories view -->
-        <div class="container mclist-container background-dark" ng-controller="CategoriesController" ng-show="visibleView == 'Categories'">
+        <div class="container mclist-container background-dark" ng-controller="CategoriesController" ng-show="visibleView === 'Categories'">
+
             <form class="form-inline mclist-input"
                   ng-class="showEditForm ? 'background-highlight' : 'background-light'"
                   ng-submit="showEditForm ? editCategory() : addCategory()">
@@ -143,7 +142,14 @@
                 <button type="submit" class="btn btn-default" ng-hide="showEditForm">
                     <span class="glyphicon glyphicon-plus"></span>
                 </button>
-
+                <div class="form-group" ng-show="showEditForm">
+                    <button type="submit" class="btn btn-default">
+                        <span class="glyphicon glyphicon-ok"></span>
+                    </button>
+                    <button type="button" class="btn btn-default" ng-click="closeEditCategory()">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </div>
             </form>
 
             <table class="table table-condensed mclist-table background-light">
@@ -161,10 +167,10 @@
                         <td class="mclist-table-categoryname" style="color: {{c.Color}}">{{c.Name}}</td>
                         <td class="mclist-table-buttons">
                             <span class="btn-group">
-                                <button type="button" class="btn btn-default" ng-click="showEditCategory(c)">
+                                <button type="button" class="btn btn-default btn-xs" ng-click="showEditCategory(c)">
                                     <span class="glyphicon glyphicon-pencil"></span>
                                 </button>
-                                <button type="button" class="btn btn-default" ng-click="deleteCategory(c.Id)">
+                                <button type="button" class="btn btn-default btn-xs" ng-click="deleteCategory(c.Id)">
                                     <span class="glyphicon glyphicon-trash"></span>
                                 </button>
                             </span>
@@ -177,10 +183,10 @@
                         <td class="mclist-table-categoryname" style="color: {{c.Color}}">{{c.Name}}</td>
                         <td class="mclist-table-buttons">
                             <span class="btn-group">
-                                <button type="button" class="btn btn-default" ng-click="showEditCategory(c)">
+                                <button type="button" class="btn btn-default btn-xs" ng-click="showEditCategory(c)">
                                     <span class="glyphicon glyphicon-pencil"></span>
                                 </button>
-                                <button type="button" class="btn btn-default" ng-click="deleteCategory(c.Id)">
+                                <button type="button" class="btn btn-default btn-xs" ng-click="deleteCategory(c.Id)">
                                     <span class="glyphicon glyphicon-trash"></span>
                                 </button>
                             </span>
@@ -188,9 +194,9 @@
                     </tr>
                 </tbody>
             </table>
+
         </div>
 
     </div>
-
 </body>
 </html>
