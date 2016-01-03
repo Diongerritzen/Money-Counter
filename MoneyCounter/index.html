@@ -114,9 +114,87 @@
 
         <!-- Statistics view -->
         <div class="container mcstats-container background-dark" ng-controller="StatisticsController" ng-show="visibleView === 'Statistics'">
-            <div class="mcstats-summary">
-            
+
+            <div class="mcstats-select background-light">
+                <select class="input-sm" ng-model="yearIndex" ng-change="monthIndex = '0'">
+                    <option value="{{$index}}" ng-repeat="year in dateList">{{year.Value}}</option>
+                </select>
+                <select class="input-sm" ng-model="monthIndex">
+                    <option value="{{$index}}" ng-repeat="month in dateList[yearIndex].Months">{{month.Name}}</option>
+                </select>
             </div>
+
+            <table class="table mcstats-summary background-light">
+                <tr>
+                    <td>
+                        <b>Statistics for {{dateList[yearIndex].Months[monthIndex].Name}}, {{dateList[yearIndex].Value}}:</b>
+                        <div ng-repeat="t in [{ Type: 'expense', Name: 'Expense' }, { Type: 'income', Name: 'Income' }]">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th class="mcstats-table-statname">{{t.Name}}:</th>
+                                        <th class="mcstats-table-amount text-{{t.Type}}">{{getTypeTotal(t.Type)}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Min:</td>
+                                        <td class="mcstats-table-amount text-{{t.Type}}">{{getMin(t.Type)}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Max:</td>
+                                        <td class="mcstats-table-amount text-{{t.Type}}">{{getMax(t.Type)}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Average (over {{getDaysInMonth()}} days): </td>
+                                        <td class="mcstats-table-amount text-{{t.Type}}">{{getAverage(t.Type)}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th class="mcstats-table-statname">Total:</th>
+                                        <th class="mcstats-table-amount">{{getTotal()}}</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </td>
+
+                    <td>
+                        <b>Statistics for all transactions:</b>
+                        <div ng-repeat="t in [{ Type: 'expense', Name: 'Expense' }, { Type: 'income', Name: 'Income' }]">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th class="mcstats-table-statname">{{t.Name}}:</th>
+                                        <th class="mcstats-table-amount">getal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr> <td>Min:</td> <td>getal</td> </tr>
+                                    <tr> <td>Max:</td> <td>getal</td> </tr>
+                                    <tr> <td>Average (per day): </td> <td>getal</td> </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th class="mcstats-table-statname">Total:</th>
+                                        <th class="mcstats-table-amount">getal</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
         </div>
 
         <!-- Recurrences view -->

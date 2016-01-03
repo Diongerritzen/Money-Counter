@@ -1,13 +1,48 @@
 ﻿var app = angular.module('MoneyCounterApp', []);
 app.controller('AppController', function ($rootScope, $scope, jsonPointerParseService, TransactionsService, CategoriesService) {
-    $rootScope.transactionList = {};
-    $rootScope.categoryList = {};
+    $rootScope.transactionList = [];
+    $rootScope.categoryList = [];
+    $rootScope.dateList = [];
     $scope.visibleView = 'Transactions';
+
+    var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
     $rootScope.refreshTransactionList = function () {
         TransactionsService.getList()
             .success(function (data) {
                 $rootScope.transactionList = jsonPointerParseService.pointerParse(data, 5);
+                $rootScope.dateList = [];
+                angular.forEach($rootScope.transactionList, function (transaction) {
+                    var date = new Date(transaction.Date);
+                    var year = date.getFullYear();
+                    var month = date.getMonth();
+
+                    var yearIndex = $rootScope.dateList.findIndex(function (element) {
+                        return (element.Value === year);
+                    });
+
+                    if (yearIndex === -1)
+                    {
+                        $rootScope.dateList.push({ Value: year, Months: [{ Value: month, Name: monthNames[month] }] });
+                    }
+                    else
+                    {
+                        var monthIndex = $rootScope.dateList[yearIndex].Months.findIndex(function (element) {
+                            return (element.Value === month);
+                        });
+                        if (monthIndex === -1)
+                        {
+                            $rootScope.dateList[yearIndex].Months.push({ Value: month, Name: monthNames[month] });
+                            $rootScope.dateList[yearIndex].Months.sort(function (a, b) {
+                                return b.Value - a.Value;
+                            })
+                        }
+                    }
+                    $rootScope.dateList.sort(function (a, b) {
+                        return b.Value - a.Value;
+                    })
+                });
             })
             .error(function () {
                 alert('error from init');
@@ -130,7 +165,85 @@ app.controller('TransactionsController', function ($rootScope, $scope, $http) {
 });
 
 app.controller('StatisticsController', function ($rootScope, $scope, $http, TransactionsService) {
-    
+    $scope.yearIndex = '0';//(new Date()).getFullYear() + '';
+    $scope.monthIndex = '0';//(new Date()).getMonth() + '';
+
+    $scope.getDaysInMonth = daysInMonth;
+
+    $scope.getTypeTotal = function (type) {
+        var transactions = filterTransactions(type);
+
+        var total = 0;
+        angular.forEach(transactions, function (transaction) {
+            total += transaction.Amount;
+        });
+
+        return total.toFixed(2);
+    }
+
+    $scope.getMin = function (type) {
+        var transactions = filterTransactions(type);
+
+        var min = Number.MAX_VALUE;
+        angular.forEach(transactions, function (transaction) {
+            if (transaction.Amount < min)
+            {
+                min = transaction.Amount;
+            }
+        });
+
+        if (min === Number.MAX_VALUE) {
+            min = 0;
+        }
+
+        return min.toFixed(2);
+    };
+
+    $scope.getMax = function (type) {
+        var transactions = filterTransactions(type);
+
+        var max = Number.MIN_VALUE;
+        angular.forEach(transactions, function (transaction) {
+            if (transaction.Amount > max)
+            {
+                max = transaction.Amount;
+            }
+        });
+
+        if (max === Number.MIN_VALUE)
+        {
+            max = 0;
+        }
+
+        return max.toFixed(2);
+    };
+
+    $scope.getAverage = function (type) {
+        var days = daysInMonth();
+        
+        return (parseFloat($scope.getTypeTotal(type)) / days).toFixed(2);
+    };
+
+    $scope.getTotal = function () {
+        return (parseFloat($scope.getTypeTotal('income')) - parseFloat($scope.getTypeTotal('expense'))).toFixed(2);
+    };
+
+    function filterTransactions(type) {
+        var year = $rootScope.dateList[$scope.yearIndex].Value;
+        var month = $rootScope.dateList[$scope.yearIndex].Months[$scope.monthIndex].Value;
+        var transactions = $rootScope.transactionList.filter(function (transaction) {
+            var date = new Date(transaction.Date);
+            return transaction.Type === type && date.getFullYear() === year && date.getMonth() === month;
+        });
+
+        return transactions;
+    }
+
+    function daysInMonth() {
+        var year = $rootScope.dateList[$scope.yearIndex].Value;
+        var month = $rootScope.dateList[$scope.yearIndex].Months[$scope.monthIndex].Value;
+        return new Date(year, month+1, 0).getDate();
+    }
 });
 
 app.controller('RecurrencesController', function ($scope, $http) {
