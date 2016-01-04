@@ -246,7 +246,7 @@ app.controller('StatisticsController', function ($rootScope, $scope, $http, Tran
         {
             transactions = $rootScope.transactionList.filter(function (transaction) {
                 var date = new Date(transaction.Date);
-                return transaction.Type === type && date.getFullYear();
+                return transaction.Type === type && date.getFullYear() === year;
             });
         }
         else

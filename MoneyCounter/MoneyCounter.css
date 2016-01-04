@@ -8,6 +8,9 @@
 .background-highlight {
     background-color: #FF3300;
 }
+.background-lowlight {
+    background-color: #5F874D;
+}
 .text-light {
     color: #F0EFED;
 }
@@ -52,13 +55,10 @@
     width: 100%;
     padding: 15px;
 }
-.mclist-input, .mcstats-select, .mcstats-summary {
+.mclist-input, .mcstats-select {
     padding: 5px;
 }
-.mclist-input .mclist-table tbody tr td {
-    border-top: none;
-}
-.mclist-table, .mcstats-summary {
+.mclist-table, .mcstats-table, .mcstats-summary {
     width: 100%;
     margin-bottom: 0px;
 }
@@ -93,15 +93,26 @@
     width: 100%;
     text-align: center;
 }
-
+.mcstats-summary-header {
+    text-align: center;
+    font-weight: bold;
+}
+.mcstats-summary > tbody > tr > td {
+    border-top: none;
+}
+.mcstats-table {
+    margin-top: 20px;
+}
 .mcstats-table-statname {
     width: 1px;
 }
-
-.mcstats-table-amount:before, .mclist-table-amount:before {
-    content: '€';
+.mcstats-table-amount::before, .mclist-table-amount::before {
+    content: '€ ';
 }
 
-.text-expense:before {
-    content: '€-';
+.text-income::before {
+    content: '€ ';
+}
+.text-expense::before {
+    content: '€ -';
 }
