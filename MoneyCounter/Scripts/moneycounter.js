@@ -18,7 +18,7 @@ app.controller('AppController', function ($rootScope, $scope, jsonPointerParseSe
                     var year = date.getFullYear();
                     var month = date.getMonth();
                     var day = date.getDate();
-                    transaction.Date = day + ' ' + monthNames[month] + ' ' + year;
+                    transaction.DateString = day + ' ' + monthNames[month] + ' ' + year;
 
                     var yearIndex = $rootScope.dateList.findIndex(function (element) {
                         return (element.Value === year);
