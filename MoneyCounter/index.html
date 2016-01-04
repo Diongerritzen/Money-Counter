@@ -13,7 +13,7 @@
     </style>
 </head>
 <body class="background-light text-dark">
-    <div class="container mcapp-container" ng-controller="AppController">
+    <div class="container mcapp-container" ng-controller="AppController" ng-switch on="visibleView">
         
         <!-- Navigation bar -->
         <nav class="navbar navbar-default mcapp-navigation">
@@ -48,7 +48,7 @@
         </nav>
 
         <!-- Transaction view -->
-        <div class="container mclist-container background-dark anim-fade" ng-controller="TransactionsController" ng-show="visibleView === 'Transactions'">
+        <div class="container mclist-container background-dark anim-fade" ng-controller="TransactionsController" ng-switch-when="Transactions">
 
             <form class="form-inline mclist-input" 
                   ng-class="showEditForm ? 'background-highlight' : 'background-light'"
@@ -114,7 +114,7 @@
         </div>
 
         <!-- Statistics view -->
-        <div class="container mcstats-container background-dark anim-fade" ng-controller="StatisticsController" ng-show="visibleView === 'Statistics'">
+        <div class="container mcstats-container background-dark anim-fade" ng-controller="StatisticsController" ng-switch-when="Statistics">
 
             <div class="mcstats-select background-light">
                 <select class="input-sm" ng-model="yearIndex" ng-change="monthIndex = '0'">
@@ -128,27 +128,29 @@
             <table class="table mcstats-summary background-light">
                 <tr>
                     <td ng-repeat="time in ['month', 'year']">
-                        <b>Statistics for {{time === 'month' ? dateList[yearIndex].Months[monthIndex].Name + ', ' : ''}}{{dateList[yearIndex].Value}}:</b>
+                        <b>Statistics for 
+                            <span class="anim-fade" ng-repeat="index in [yearIndex+monthIndex]">{{time === 'month' ? dateList[yearIndex].Months[monthIndex].Name + ', ' : ''}}{{dateList[yearIndex].Value}}</span>
+                        </b>
                         <div ng-repeat="t in [{ Type: 'expense', Name: 'Expense' }, { Type: 'income', Name: 'Income' }]">
                             <table class="table table-condensed">
                                 <thead>
                                     <tr>
                                         <th class="mcstats-table-statname">{{t.Name}}:</th>
-                                        <th class="mcstats-table-amount text-{{t.Type}}">{{getTypeTotal(t.Type, time)}}</th>
+                                        <th class="mcstats-table-amount text-{{t.Type}} anim-fade" ng-repeat="index in [yearIndex+monthIndex]">{{getTypeTotal(t.Type, time)}}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>Min:</td>
-                                        <td class="mcstats-table-amount text-{{t.Type}}">{{getMin(t.Type, time)}}</td>
+                                        <td class="mcstats-table-amount text-{{t.Type}} anim-fade" ng-repeat="index in [yearIndex+monthIndex]">{{getMin(t.Type, time)}}</td>
                                     </tr>
                                     <tr>
                                         <td>Max:</td>
-                                        <td class="mcstats-table-amount text-{{t.Type}}">{{getMax(t.Type, time)}}</td>
+                                        <td class="mcstats-table-amount text-{{t.Type}} anim-fade" ng-repeat="index in [yearIndex+monthIndex]">{{getMax(t.Type, time)}}</td>
                                     </tr>
                                     <tr>
                                         <td>Average (over {{time === 'month' ? getDaysInMonth() : getDaysInYear() }} days): </td>
-                                        <td class="mcstats-table-amount text-{{t.Type}}">{{getAverage(t.Type, time)}}</td>
+                                        <td class="mcstats-table-amount text-{{t.Type}} anim-fade" ng-repeat="index in [yearIndex+monthIndex]">{{getAverage(t.Type, time)}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -158,7 +160,7 @@
                                 <thead>
                                     <tr>
                                         <th class="mcstats-table-statname">Total:</th>
-                                        <th class="mcstats-table-amount">{{getTotal(time)}}</th>
+                                        <th class="mcstats-table-amount anim-fade" ng-repeat="index in [yearIndex+monthIndex]">{{getTotal(time)}}</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -170,12 +172,12 @@
         </div>
 
         <!-- Recurrences view -->
-        <div class="container mclist-container background-dark" ng-controller="RecurrencesController" ng-show="visibleView === 'Recurrences'">
+        <div class="container mclist-container background-dark anim-fade" ng-controller="RecurrencesController" ng-switch-when="Recurrences">
 
         </div>
 
         <!-- Categories view -->
-        <div class="container mclist-container background-dark anim-fade" ng-controller="CategoriesController" ng-show="visibleView === 'Categories'">
+        <div class="container mclist-container background-dark anim-fade" ng-controller="CategoriesController" ng-switch-when="Categories">
 
             <form class="form-inline mclist-input"
                   ng-class="showEditForm ? 'background-highlight' : 'background-light'"
