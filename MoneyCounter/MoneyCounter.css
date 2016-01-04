@@ -24,6 +24,21 @@
 }
 /* end color scheme */
 
+/* animations */
+.anim-fade.ng-hide-remove, .anim-fade.ng-enter, .anim-fade.ng-move {
+    animation: 0.5s fadeIn;
+}
+
+@keyframes fadeIn {
+  from { opacity:0; }
+  to { opacity:1; }
+}
+@keyframes fadeOut {
+  from { opacity:1; }
+  to { opacity:0; }
+}
+/* end animations */
+
 .mcapp-container {
     min-width: 600px;
     width: 50%;

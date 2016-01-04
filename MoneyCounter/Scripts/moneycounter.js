@@ -1,4 +1,4 @@
-﻿var app = angular.module('MoneyCounterApp', []);
+﻿var app = angular.module('MoneyCounterApp', ['ngAnimate']);
 app.controller('AppController', function ($rootScope, $scope, jsonPointerParseService, TransactionsService, CategoriesService) {
     $rootScope.transactionList = [];
     $rootScope.categoryList = [];
