@@ -57,7 +57,7 @@
     padding: 5px;
 }
 .mclist-scroll {
-    max-height: 600px;
+    max-height: 75vh;
     overflow-y: auto;
 }
 .mclist-table, .mcstats-table, .mcstats-summary {
