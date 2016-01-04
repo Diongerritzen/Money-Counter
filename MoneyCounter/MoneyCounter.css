@@ -51,7 +51,7 @@
     text-align: center;
 }
 .mclist-table-date {
-    width: 1px;
+    width: 90px;
 }
 .mclist-table-category {
     width: 100px;
@@ -83,10 +83,10 @@
     width: 1px;
 }
 
-.text-expense:before {
-    content: '€-';
+.mcstats-table-amount:before, .mclist-table-amount:before {
+    content: '€';
 }
 
-.text-income:before {
-    content: '€';
+.text-expense:before {
+    content: '€-';
 }

@@ -169,9 +169,10 @@ app.controller('StatisticsController', function ($rootScope, $scope, $http, Tran
     $scope.monthIndex = '0';//(new Date()).getMonth() + '';
 
     $scope.getDaysInMonth = daysInMonth;
+    $scope.getDaysInYear = daysInYear;
 
-    $scope.getTypeTotal = function (type) {
-        var transactions = filterTransactions(type);
+    $scope.getTypeTotal = function (type, time) {
+        var transactions = filterTransactions(type, time);
 
         var total = 0;
         angular.forEach(transactions, function (transaction) {
@@ -181,8 +182,8 @@ app.controller('StatisticsController', function ($rootScope, $scope, $http, Tran
         return total.toFixed(2);
     }
 
-    $scope.getMin = function (type) {
-        var transactions = filterTransactions(type);
+    $scope.getMin = function (type, time) {
+        var transactions = filterTransactions(type, time);
 
         var min = Number.MAX_VALUE;
         angular.forEach(transactions, function (transaction) {
@@ -199,8 +200,8 @@ app.controller('StatisticsController', function ($rootScope, $scope, $http, Tran
         return min.toFixed(2);
     };
 
-    $scope.getMax = function (type) {
-        var transactions = filterTransactions(type);
+    $scope.getMax = function (type, time) {
+        var transactions = filterTransactions(type, time);
 
         var max = Number.MIN_VALUE;
         angular.forEach(transactions, function (transaction) {
@@ -218,31 +219,74 @@ app.controller('StatisticsController', function ($rootScope, $scope, $http, Tran
         return max.toFixed(2);
     };
 
-    $scope.getAverage = function (type) {
-        var days = daysInMonth();
+    $scope.getAverage = function (type, time) {
+        var days = time === 'year' ? daysInYear() : daysInMonth();
+
+        if (days === 0)
+        {
+            days = 1;
+        }
         
-        return (parseFloat($scope.getTypeTotal(type)) / days).toFixed(2);
+        return (parseFloat($scope.getTypeTotal(type, time)) / days).toFixed(2);
     };
 
-    $scope.getTotal = function () {
-        return (parseFloat($scope.getTypeTotal('income')) - parseFloat($scope.getTypeTotal('expense'))).toFixed(2);
+    $scope.getTotal = function (time) {
+        return (parseFloat($scope.getTypeTotal('income', time)) - parseFloat($scope.getTypeTotal('expense', time))).toFixed(2);
     };
 
-    function filterTransactions(type) {
+    function filterTransactions(type, time) {
+        if ($rootScope.dateList.length < 1)
+        {
+            return [];
+        }
+
         var year = $rootScope.dateList[$scope.yearIndex].Value;
-        var month = $rootScope.dateList[$scope.yearIndex].Months[$scope.monthIndex].Value;
-        var transactions = $rootScope.transactionList.filter(function (transaction) {
-            var date = new Date(transaction.Date);
-            return transaction.Type === type && date.getFullYear() === year && date.getMonth() === month;
-        });
+        var transactions = [];
+        if (time === 'year')
+        {
+            transactions = $rootScope.transactionList.filter(function (transaction) {
+                var date = new Date(transaction.Date);
+                return transaction.Type === type && date.getFullYear();
+            });
+        }
+        else
+        {
+            var month = $rootScope.dateList[$scope.yearIndex].Months[$scope.monthIndex].Value;
+            transactions = $rootScope.transactionList.filter(function (transaction) {
+                var date = new Date(transaction.Date);
+                return transaction.Type === type && date.getFullYear() === year && date.getMonth() === month;
+            });
+        }
 
         return transactions;
     }
 
     function daysInMonth() {
+        if ($rootScope.dateList.length < 1)
+        {
+            return 0;
+        }
+
         var year = $rootScope.dateList[$scope.yearIndex].Value;
         var month = $rootScope.dateList[$scope.yearIndex].Months[$scope.monthIndex].Value;
-        return new Date(year, month+1, 0).getDate();
+
+        return new Date(year, month + 1, 0).getDate();
+    }
+
+    function daysInYear() {
+        if ($rootScope.dateList.length < 1)
+        {
+            return 0;
+        }
+
+        var year = $rootScope.dateList[$scope.yearIndex].Value;
+        var days = 0;
+        for (var month = 0; month < 12; month++)
+        {
+            days += new Date(year, month + 1, 0).getDate();
+        }
+
+        return days;
     }
 });
 
@@ -257,7 +301,7 @@ app.controller('CategoriesController', function ($rootScope, $scope, $http) {
     
     // default values for add/edit category form
     $scope.categoryTypeInput = 'expense';
-    $scope.categoryColorInput = '#000';
+    $scope.categoryColorInput = '#000000';
 
     $scope.showEditForm = false;
     $scope.editableCategory = {};
@@ -293,7 +337,7 @@ app.controller('CategoriesController', function ($rootScope, $scope, $http) {
     $scope.closeEditCategory = function () {
         $scope.categoryNameInput = '';
         $scope.categoryTypeInput = 'expense';
-        $scope.categoryColorInput = '#000';
+        $scope.categoryColorInput = '#000000';
 
         $scope.editableCategory = {};
         $scope.showEditForm = false;
