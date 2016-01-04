@@ -12,8 +12,8 @@
 
     </style>
 </head>
-<body class="background-light text-dark">
-    <div class="container mcapp-container" ng-controller="AppController" ng-switch on="visibleView">
+<body class="background-dark text-dark">
+    <div class="container mcapp-container background-light" ng-controller="AppController" ng-switch on="visibleView">
         
         <!-- Navigation bar -->
         <nav class="navbar navbar-default mcapp-navigation">
@@ -82,6 +82,10 @@
                 </div>
             </form>
 
+            <div class="mclist-input background-light">
+                <input class="form-control" type="text" ng-model="filterText" placeholder="Filter by" />
+            </div>
+
             <table class="table table-condensed mclist-table background-light">
                 <thead>
                     <tr>
@@ -93,9 +97,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="anim-fade" ng-repeat="t in transactionList | orderBy: transactionOrdering">
+                    <tr class="anim-fade" ng-repeat="t in transactionList | filter: filterText | orderBy: transactionOrdering">
                         <td class="mclist-table-date">{{formatDate(t.Date)}}</td>
-                        <td class="mclist-table-category" style="color: {{t.Category.Color}}"><b>{{t.Category.Name}}</b></td>
+                        <td class="mclist-table-category" style="color: {{t.Category.Color}}">{{t.Category.Name}}</td>
                         <td class="mclist-table-desc">{{t.Description}}</td>
                         <td class="mclist-table-amount text-{{t.Type}}">{{t.Amount.toFixed(2)}}</td>
                         <td class="mclist-table-buttons-sm">
@@ -221,7 +225,7 @@
                 </thead>
                 <tbody>
                     <tr class="anim-fade" ng-repeat="c in categoryList | filter: { TransactionType : t.Type }">
-                        <td class="mclist-table-categoryname" style="color: {{c.Color}}"><b>{{c.Name}}</b></td>
+                        <td class="mclist-table-categoryname" style="color: {{c.Color}}">{{c.Name}}</td>
                         <td class="mclist-table-buttons-sm">
                             <span class="btn-group" ng-hide="c.Default">
                                 <button type="button" class="btn btn-default btn-sm" ng-click="showEditCategory(c)">

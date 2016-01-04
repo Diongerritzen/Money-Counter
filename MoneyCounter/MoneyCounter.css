@@ -3,7 +3,7 @@
     background-color: #F0EFED;
 }
 .background-dark {
-    background-color: #990000;
+    background-color: #cadecd;
 }
 .background-highlight {
     background-color: #FF3300;
@@ -19,11 +19,11 @@
 }
 .text-expense {
     color: red;
-    font-weight: bold;
+    /*font-weight: bold;*/
 }
 .text-income {
     color: green;
-    font-weight: bold;
+    /*font-weight: bold;*/
 }
 /* end color scheme */
 
@@ -53,7 +53,7 @@
 
 .mclist-container, .mcstats-container {
     width: 100%;
-    padding: 15px;
+    padding: 2px;
 }
 .mclist-input, .mcstats-select {
     padding: 5px;
@@ -99,6 +99,7 @@
 }
 .mcstats-summary > tbody > tr > td {
     border-top: none;
+    padding: 0px;
 }
 .mcstats-table {
     margin-top: 20px;
