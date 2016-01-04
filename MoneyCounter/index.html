@@ -85,36 +85,37 @@
             <div class="mclist-input background-light">
                 <input class="form-control" type="text" ng-model="filterText" placeholder="Filter by" />
             </div>
-
-            <table class="table table-condensed mclist-table background-light">
-                <thead>
-                    <tr>
-                        <th class="mclist-table-header" ng-click="transactionOrdering = '-Date'">Date</th>
-                        <th class="mclist-table-header" ng-click="transactionOrdering = 'Category.Name'">Category</th>
-                        <th class="mclist-table-header" ng-click="transactionOrdering = 'Description'">Description</th>
-                        <th class="mclist-table-header" ng-click="transactionOrdering = 'Type === \'income\' ? Amount : -Amount'">Amount</th>
-                        <th class="mclist-table-header"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="anim-fade" ng-repeat="t in transactionList | filter: filterText | orderBy: transactionOrdering">
-                        <td class="mclist-table-date">{{formatDate(t.Date)}}</td>
-                        <td class="mclist-table-category" style="color: {{t.Category.Color}}">{{t.Category.Name}}</td>
-                        <td class="mclist-table-desc">{{t.Description}}</td>
-                        <td class="mclist-table-amount text-{{t.Type}}">{{t.Amount.toFixed(2)}}</td>
-                        <td class="mclist-table-buttons-sm">
-                            <span class="btn-group">
-                                <button type="button" class="btn btn-default btn-sm" ng-click="showEditTransaction(t)">
-                                    <span class="glyphicon glyphicon-pencil"></span>
-                                </button>
-                                <button type="button" class="btn btn-default btn-sm" ng-click="deleteTransaction(t.Id)">
-                                    <span class="glyphicon glyphicon-trash"></span>
-                                </button>
-                            </span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="mclist-scroll">
+                <table class="table table-condensed mclist-table background-light">
+                    <thead>
+                        <tr>
+                            <th class="mclist-table-header" ng-click="changeOrdering('-Date')">Date</th>
+                            <th class="mclist-table-header" ng-click="changeOrdering('Category.Name')">Category</th>
+                            <th class="mclist-table-header" ng-click="changeOrdering('Description')">Description</th>
+                            <th class="mclist-table-header" ng-click="changeOrdering('Type === \'income\' ? Amount : -Amount')">Amount</th>
+                            <th class="mclist-table-header"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="anim-fade" ng-repeat="t in transactionList | filter: filterText | orderBy: transactionOrdering">
+                            <td class="mclist-table-date">{{formatDate(t.Date)}}</td>
+                            <td class="mclist-table-category" style="color: {{t.Category.Color}}">{{t.Category.Name}}</td>
+                            <td class="mclist-table-desc">{{t.Description}}</td>
+                            <td class="mclist-table-amount text-{{t.Type}}">{{t.Amount.toFixed(2)}}</td>
+                            <td class="mclist-table-buttons-sm">
+                                <span class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm" ng-click="showEditTransaction(t)">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </button>
+                                    <button type="button" class="btn btn-default btn-sm" ng-click="deleteTransaction(t.Id)">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </button>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             
         </div>
 

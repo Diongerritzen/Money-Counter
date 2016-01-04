@@ -19,11 +19,9 @@
 }
 .text-expense {
     color: red;
-    /*font-weight: bold;*/
 }
 .text-income {
     color: green;
-    /*font-weight: bold;*/
 }
 /* end color scheme */
 
@@ -53,10 +51,14 @@
 
 .mclist-container, .mcstats-container {
     width: 100%;
-    padding: 2px;
+    padding: 5px;
 }
 .mclist-input, .mcstats-select {
     padding: 5px;
+}
+.mclist-scroll {
+    max-height: 600px;
+    overflow-y: auto;
 }
 .mclist-table, .mcstats-table, .mcstats-summary {
     width: 100%;

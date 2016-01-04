@@ -17,6 +17,8 @@ app.controller('AppController', function ($rootScope, $scope, jsonPointerParseSe
                     var date = new Date(transaction.Date);
                     var year = date.getFullYear();
                     var month = date.getMonth();
+                    var day = date.getDate();
+                    transaction.Date = day + '-' + monthNames[month] + '-' + year;
 
                     var yearIndex = $rootScope.dateList.findIndex(function (element) {
                         return (element.Value === year);
@@ -78,6 +80,24 @@ app.controller('TransactionsController', function ($rootScope, $scope, $http) {
     $scope.transactionOrdering = '-Date';
     $scope.showEditForm = false;
     $scope.editableTransaction = {};
+
+    $scope.changeOrdering = function (order) {
+        if (order === $scope.transactionOrdering)
+        {
+            if (order.slice(0, 1) === '-')
+            {
+                $scope.transactionOrdering = order.substr(1);
+            }
+            else
+            {
+                $scope.transactionOrdering = '-'.concat(order);
+            }
+        }
+        else
+        {
+            $scope.transactionOrdering = order;
+        }
+    }
 
     $scope.setDefaultCategory = function () {
         $scope.transactionCategoryInput = $scope.transactionTypeInput === 'expense' ? ('' + $rootScope.categoryList[0].Id) : ('' + $rootScope.categoryList[1].Id);
