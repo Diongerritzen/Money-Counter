@@ -32,17 +32,17 @@
                         <li ng-class="visibleView === 'Statistics' ? 'active' : ''">
                             <a href="" ng-click="visibleView = 'Statistics'"><span class="glyphicon glyphicon-stats"></span> Statistics</a>
                         </li>
-                        <!--<li ng-class="visibleView === 'Recurrences' ? 'active' : ''">
+                        <li ng-class="visibleView === 'Recurrences' ? 'active' : ''">
                             <a href="" ng-click="visibleView = 'Recurrences'"> <span class="glyphicon glyphicon-repeat"></span> Recurrences</a>
-                        </li>-->
+                        </li>
                         <li ng-class="visibleView === 'Categories' ? 'active' : ''">
                             <a href="" ng-click="visibleView = 'Categories'"><span class="glyphicon glyphicon-tag"></span> Categories</a>
                         </li>
                     </ul>
-                    <!--<ul class="nav navbar-nav navbar-right">
+                    <ul class="nav navbar-nav navbar-right">
                         <li><a href=""><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
                         <li><a href=""><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-                    </ul>-->
+                    </ul>
                 </div>
             </div>
         </nav>
@@ -56,6 +56,11 @@
                   ng-switch on="showEditForm">
                 <input class="form-control input-sm" type="date" ng-model="transactionDateInput" required />
 
+                <select class="form-control input-sm" ng-model="transactionTypeInput" ng-change="setDefaultCategory()">
+                    <option value="expense">Expense</option>
+                    <option value="income">Income</option>
+                </select>
+
                 <select class="form-control input-sm" ng-model="transactionCategoryInput">
                     <option value="{{c.Id}}" ng-repeat="c in categoryList | filter: { TransactionType: transactionTypeInput }">{{c.Name}}</option>
                 </select>
@@ -63,11 +68,6 @@
                 <input class="form-control input-sm" type="text" placeholder="Description" ng-model="transactionDescriptionInput" />
 
                 <input class="form-control input-sm" type="number" step="0.01" min="0.00" placeholder="0.00" ng-model="transactionAmountInput" required />
-
-                <select class="form-control input-sm" ng-model="transactionTypeInput" ng-change="setDefaultCategory()">
-                    <option value="expense">Expense</option>
-                    <option value="income">Income</option>
-                </select>
 
                 <button type="submit" class="btn btn-default btn-sm" ng-switch-when="false">
                     <span class="glyphicon glyphicon-plus"></span>
@@ -82,17 +82,37 @@
                 </div>
             </form>
 
-            <div class="mclist-input background-light">
+            <div class="form-inline mclist-input background-light">
                 <input class="form-control" type="text" ng-model="filterText" placeholder="Filter by" />
+                <button class="form-control" type="button" ng-click="filterText = ''">
+                    <span class="glyphicon glyphicon-erase"></span>
+                </button>
             </div>
+
             <div class="mclist-scroll">
                 <table class="table table-condensed mclist-table background-light">
                     <thead>
-                        <tr>
-                            <th class="mclist-table-header" ng-click="changeOrdering('-Date')">Date</th>
-                            <th class="mclist-table-header" ng-click="changeOrdering('Category.Name')">Category</th>
-                            <th class="mclist-table-header" ng-click="changeOrdering('Description')">Description</th>
-                            <th class="mclist-table-header" ng-click="changeOrdering('Type === \'income\' ? Amount : -Amount')">Amount</th>
+                        <tr ng-switch on="transactionOrdering">
+                            <th class="mclist-table-header" ng-click="changeOrdering('-Date')">
+                                <span class="glyphicon glyphicon-chevron-up" ng-switch-when="Date"></span>
+                                <span class="glyphicon glyphicon-chevron-down" ng-switch-when="-Date"></span>
+                                Date
+                            </th>
+                            <th class="mclist-table-header" ng-click="changeOrdering('Category.Name')">
+                                <span class="glyphicon glyphicon-chevron-up" ng-switch-when="Category.Name"></span>
+                                <span class="glyphicon glyphicon-chevron-down" ng-switch-when="-Category.Name"></span>
+                                Category
+                            </th>
+                            <th class="mclist-table-header" ng-click="changeOrdering('Description')">
+                                <span class="glyphicon glyphicon-chevron-up" ng-switch-when="Description"></span>
+                                <span class="glyphicon glyphicon-chevron-down" ng-switch-when="-Description"></span>
+                                Description
+                            </th>
+                            <th class="mclist-table-header" ng-click="changeOrdering('Type === \'income\' ? Amount : -Amount')">
+                                <span class="glyphicon glyphicon-chevron-up" ng-switch-when="Type === 'income' ? Amount : -Amount"></span>
+                                <span class="glyphicon glyphicon-chevron-down" ng-switch-when="-Type === 'income' ? Amount : -Amount"></span>
+                                Amount
+                            </th>
                             <th class="mclist-table-header"></th>
                         </tr>
                     </thead>

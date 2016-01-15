@@ -78,7 +78,7 @@
     width: auto;
 }
 .mclist-table-amount, .mcstats-table-amount {
-    width: 80px;
+    width: 90px;
     text-align: right;
 }
 .mclist-table-buttons-sm {
@@ -109,11 +109,7 @@
 .mcstats-table-statname {
     width: 1px;
 }
-.mcstats-table-amount::before, .mclist-table-amount::before {
-    content: '€ ';
-}
-
-.text-income::before {
+.mcstats-table-amount::before, .mclist-table-amount::before, .text-income::before {
     content: '€ ';
 }
 .text-expense::before {
